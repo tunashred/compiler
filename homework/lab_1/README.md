@@ -51,7 +51,7 @@ Non-matching examples:
 [a
 ```
 
-### Solution (until I think of a better one)
+### Solution (still thinking of a better one)
 ```
-\^?\[\^?(\\[rnt])*|(\\\\)+|([a-zA-Z0-9_]\-?[a-zA-Z0-9_])*\]\$?
+((\\[rnt\.\(\)\-\+\{\}\|\\])|(([a-z]\-[a-z])|([A-Z]\-[A-Z])|([0-9]\-[0-9]))|([a-zA-Z0-9_!@#%&=;:'"`~<> ]))
 ```
