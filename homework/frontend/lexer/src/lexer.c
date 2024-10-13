@@ -41,8 +41,11 @@ void tokenize(const char* p_ch) {
     char buf[MAX_STR + 1];
     for (;;) {
         switch (*p_ch) {
+            case '#':
+                for(start = p_ch++; *p_ch != '\n'; p_ch++) {}
+                p_ch++;
+                break;
             case ' ':
-            case '#': // do i need to get to the next line
             case '\t':
                 p_ch++;
                 break;
@@ -56,12 +59,24 @@ void tokenize(const char* p_ch) {
                 p_ch++;
                 break;
 
-            case '\0':
-                addTk(FINISH);
-                return;
-
             case ',':
                 addTk(COMMA);
+                p_ch++;
+                break;
+            case ':':
+                addTk(COLON);
+                p_ch++;
+                break;
+            case ';':
+                addTk(SEMICOLON);
+                p_ch++;
+                break;
+            case '(':
+                addTk(LPAR);
+                p_ch++;
+                break;
+            case ')':
+                addTk(RPAR);
                 p_ch++;
                 break;
 
@@ -74,6 +89,10 @@ void tokenize(const char* p_ch) {
                     p_ch++;
                 }
                 break;
+
+            case '\0':
+                addTk(FINISH);
+                return;
 
             default:
                 if (isalpha(*p_ch) || *p_ch == '_') {
@@ -99,6 +118,6 @@ void tokenize(const char* p_ch) {
 void showTokens() {
     for (int i = 0; i < numTokens; i++) {
         Token* tk = &tokens[i];
-        printf("%d\n", tk->code);
+        printf("Line: %d, code: %d\n", tk->line, tk->code);
     }
 }
