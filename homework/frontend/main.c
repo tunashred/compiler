@@ -2,9 +2,7 @@
 #include "utils.h"
 
 int main() {
-    printf("test\n");
-
-    char* buffer = loadFile("../lexer/test/sample_1.txt");
+    char* buffer = loadFile("../lexer/test/sample_2.txt");
     tokenize(buffer);
     showTokens();
 

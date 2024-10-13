@@ -7,29 +7,33 @@ int numTokens;
 int line = 1;
 
 Token* addTk(int code) {
-    if (numTokens == MAX_TOKENS)
-        err("too many tokens");
+    if (numTokens == MAX_TOKENS) {
+        err("Reached maximum number of tokens\n");
+    }
     Token* tk = &tokens[numTokens];
-    tk->code  = code;
-    tk->line  = line;
+    tk->code = code;
+    tk->line = line;
     numTokens++;
     return tk;
 }
 
-char* copyn(char* dst, const char* begin, const char* end) {
-    char* p = dst;
-    if (end - begin > MAX_STR)
-        err("string too long");
-    while (begin != end)
-        *p++ = *begin++;
-    *p = '\0';
+char* copy_slice(char* dst, const char* begin, const char* end) {
+    char* new_str = dst;
+    if (end - begin > MAX_STR) {
+        err("String is too long\n");
+    }
+
+    while (begin != end) {
+        *new_str++ = *begin++;
+    }
+    *new_str = '\0';
     return dst;
 }
 
 void tokenize(const char* pch) {
     const char* start;
-    Token*      tk;
-    char        buf[MAX_STR + 1];
+    Token* tk;
+    char buf[MAX_STR + 1];
     for (;;) {
         switch (*pch) {
             case ' ':
@@ -37,8 +41,9 @@ void tokenize(const char* pch) {
                 pch++;
                 break;
             case '\r':
-                if (pch[1] == '\n')
+                if (pch[1] == '\n') {
                     pch++;
+                }
             case '\n':
                 line++;
                 pch++;
@@ -62,15 +67,16 @@ void tokenize(const char* pch) {
             default:
                 if (isalpha(*pch) || *pch == '_') {
                     for (start = pch++; isalnum(*pch) || *pch == '_'; pch++) {}
-                    char* text = copyn(buf, start, pch);
-                    if (strcmp(text, "int") == 0)
+                    char* text = copy_slice(buf, start, pch);
+                    if (strcmp(text, "int") == 0) {
                         addTk(TYPE_INT);
-                    else {
+                    } else {
                         tk = addTk(ID);
                         strcpy(tk->text, text);
                     }
-                } else
-                    err("invalid char: %c (%d)", *pch, *pch);
+                } else {
+                    err("Invalid char: %c (%d)", *pch, *pch);
+                }
         }
     }
 }

@@ -28,15 +28,15 @@ typedef struct {
     int line;
 
     union {
-        char   text[MAX_STR + 1];
-        int    i;
+        char text[MAX_STR + 1];
+        int i;
         double r;
     };
 } Token;
 
 #define MAX_TOKENS 4096
 extern Token tokens[];
-extern int   numTokens;
+extern int numTokens;
 
 void tokenize(const char* pch);
 void showTokens();
