@@ -1,3 +1,8 @@
+#include <stdbool.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "lexer.h"
 #include "utils.h"
 
@@ -30,52 +35,62 @@ char* copy_slice(char* dst, const char* begin, const char* end) {
     return dst;
 }
 
-void tokenize(const char* pch) {
+void tokenize(const char* p_ch) {
     const char* start;
     Token* tk;
     char buf[MAX_STR + 1];
     for (;;) {
-        switch (*pch) {
+        switch (*p_ch) {
             case ' ':
+            case '#': // do i need to get to the next line
             case '\t':
-                pch++;
+                p_ch++;
                 break;
+
             case '\r':
-                if (pch[1] == '\n') {
-                    pch++;
+                if (p_ch[1] == '\n') {
+                    p_ch++;
                 }
             case '\n':
                 line++;
-                pch++;
+                p_ch++;
                 break;
+
             case '\0':
                 addTk(FINISH);
                 return;
+
             case ',':
                 addTk(COMMA);
-                pch++;
+                p_ch++;
                 break;
+
             case '=':
-                if (pch[1] == '=') {
+                if (p_ch[1] == '=') {
                     addTk(EQUAL);
-                    pch += 2;
+                    p_ch += 2;
                 } else {
                     addTk(ASSIGN);
-                    pch++;
+                    p_ch++;
                 }
                 break;
+
             default:
-                if (isalpha(*pch) || *pch == '_') {
-                    for (start = pch++; isalnum(*pch) || *pch == '_'; pch++) {}
-                    char* text = copy_slice(buf, start, pch);
-                    if (strcmp(text, "int") == 0) {
+                if (isalpha(*p_ch) || *p_ch == '_') {
+                    for (start = p_ch++; isalnum(*p_ch) || *p_ch == '_'; p_ch++) {}
+                    char* text = copy_slice(buf, start, p_ch);
+                    if (!strcmp(text, "int")) {
                         addTk(TYPE_INT);
+                    } else if (!strcmp(text, "float")) { // do we want double or float?
+                        addTk(TYPE_REAL);
+                    } else if (!strcmp(text, "char")) {
+                        addTk(TYPE_STR);
                     } else {
                         tk = addTk(ID);
                         strcpy(tk->text, text);
                     }
                 } else {
-                    err("Invalid char: %c (%d)", *pch, *pch);
+                    err("Invalid char: %c (%d)", *p_ch, *p_ch);
                 }
         }
     }

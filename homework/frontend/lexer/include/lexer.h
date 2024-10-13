@@ -1,25 +1,21 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-enum {
-    ID
+typedef enum {
+    ID,
     // keywords
-    ,
-    TYPE_INT
+    VAR, FUNCTION, IF, ELSE, WHILE, END, RETURN,
+    TYPE_INT, TYPE_REAL, TYPE_STR,
     // delimiters
-    ,
-    COMMA,
-    FINISH
+    COMMA, COLON, SEMICOLON, LPAR, RPAR, FINISH,
     // operators
-    ,
+    ADD, SUB, MUL, DIV,
+    AND, OR, NOT,
     ASSIGN,
-    EQUAL
-};
+    EQUAL, NOT_EQ, LESS, GREATER, GREATER_EQ,
+    // non-tokens
+    SPACE, COMMENT
+} token_types;
 
 #define MAX_STR 127
 

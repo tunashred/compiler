@@ -36,7 +36,7 @@ char* loadFile(const char* fileName) {
 
     fclose(file);
     if (file_size != nRead) {
-        err("cannot read all the content of %s", fileName);
+        err("Cannot read all the content of %s", fileName);
     }
     buf[file_size] = '\0';
     return buf;
