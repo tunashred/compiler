@@ -43,6 +43,7 @@ void tokenize(const char* p_ch) {
         switch (*p_ch) {
             case '#':
                 for(start = p_ch++; *p_ch != '\n'; p_ch++) {}
+                line++;
                 p_ch++;
                 break;
             case ' ':
