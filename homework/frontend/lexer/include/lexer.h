@@ -35,6 +35,9 @@ extern Token tokens[];
 extern int numTokens;
 
 void tokenize(const char* pch);
+
+const char* getTokenTypeName(token_types code);
+
 void showTokens();
 
 #endif

@@ -40,6 +40,7 @@ void tokenize(const char* p_ch) {
     Token* tk;
     char buf[MAX_STR + 1];
     for (;;) {
+        int prev_tk_code = tokens[numTokens - 1].code;
         switch (*p_ch) {
             case '#':
                 for(start = p_ch++; *p_ch != '\n'; p_ch++) {}
@@ -81,6 +82,41 @@ void tokenize(const char* p_ch) {
                 p_ch++;
                 break;
 
+            case '+': // maybe for increment too; ++
+                addTk(ADD);
+                p_ch++;
+                break;
+            case '-':
+                addTk(SUB);
+                p_ch++;
+                break;
+            case '*': // hmm, this means the language does not support pointers
+                addTk(MUL);
+                p_ch++;
+                break;
+            case '/':
+                addTk(DIV);
+                p_ch++;
+                break;
+
+            case '&':
+                addTk(AND);
+                p_ch++;
+                break;
+            case '|':
+                addTk(OR);
+                p_ch++;
+                break;
+            case '!':
+                if(p_ch[1] == '=') {
+                    addTk(NOT_EQ);
+                    p_ch += 2;
+                } else {
+                    addTk(NOT);
+                    p_ch++;
+                }
+                break;
+
             case '=':
                 if (p_ch[1] == '=') {
                     addTk(EQUAL);
@@ -90,6 +126,17 @@ void tokenize(const char* p_ch) {
                     p_ch++;
                 }
                 break;
+            case '<':
+                addTk(LESS);
+                p_ch++;
+                break;
+            case '>':
+                if(p_ch[1] == '=') {
+                    addTk(GREATER_EQ);
+                    p_ch += 2;
+                } else {
+                    addTk(GREATER);
+                }
 
             case '\0':
                 addTk(FINISH);
@@ -116,9 +163,47 @@ void tokenize(const char* p_ch) {
     }
 }
 
+const char* getTokenTypeName(token_types code) {
+    switch (code) {
+        case ID: return "ID";
+        case VAR: return "VAR";
+        case FUNCTION: return "FUNCTION";
+        case IF: return "IF";
+        case ELSE: return "ELSE";
+        case WHILE: return "WHILE";
+        case END: return "END";
+        case RETURN: return "RETURN";
+        case TYPE_INT: return "TYPE_INT";
+        case TYPE_REAL: return "TYPE_REAL";
+        case TYPE_STR: return "TYPE_STR";
+        case COMMA: return "COMMA";
+        case COLON: return "COLON";
+        case SEMICOLON: return "SEMICOLON";
+        case LPAR: return "LPAR";
+        case RPAR: return "RPAR";
+        case FINISH: return "FINISH";
+        case ADD: return "ADD";
+        case SUB: return "SUB";
+        case MUL: return "MUL";
+        case DIV: return "DIV";
+        case AND: return "AND";
+        case OR: return "OR";
+        case NOT: return "NOT";
+        case ASSIGN: return "ASSIGN";
+        case EQUAL: return "EQUAL";
+        case NOT_EQ: return "NOT_EQ";
+        case LESS: return "LESS";
+        case GREATER: return "GREATER";
+        case GREATER_EQ: return "GREATER_EQ";
+        case SPACE: return "SPACE";
+        case COMMENT: return "COMMENT";
+        default: return "UNKNOWN";
+    }
+}
+
 void showTokens() {
     for (int i = 0; i < numTokens; i++) {
         Token* tk = &tokens[i];
-        printf("Line: %d, code: %d\n", tk->line, tk->code);
+        printf("Line: %4d, code: %2d %8s\n", tk->line, tk->code, getTokenTypeName(tk->code));
     }
 }
