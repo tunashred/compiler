@@ -143,7 +143,7 @@ void tokenize(const char* p_ch) {
                 return;
 
             default:
-                if (isalpha(*p_ch) || *p_ch == '_') {
+                if ( (isalpha(*p_ch) || *p_ch == '_') || isdigit(*p_ch)) {
                     for (start = p_ch++; isalnum(*p_ch) || *p_ch == '_'; p_ch++) {}
                     char* text = copy_slice(buf, start, p_ch);
                     if (!strcmp(text, "int")) {
@@ -152,9 +152,14 @@ void tokenize(const char* p_ch) {
                         addTk(TYPE_REAL);
                     } else if (!strcmp(text, "char")) {
                         addTk(TYPE_STR);
-                    } else {
-                        tk = addTk(ID);
-                        strcpy(tk->text, text);
+                    } else if (isdigit(*text)) {
+                        // though, this is not very elegant. 
+                        // I should treat strings too.. and such treatment must be generalised based on the
+                        // operators
+                        if(prev_tk_code == LPAR || (prev_tk_code >= ADD && prev_tk_code <= GREATER_EQ)) {
+                            tk = addTk(ID);
+                            strcpy(tk->text, text);
+                        }
                     }
                 } else {
                     err("Invalid char: %c (%d)", *p_ch, *p_ch);
