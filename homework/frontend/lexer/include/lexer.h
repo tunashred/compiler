@@ -13,6 +13,8 @@ typedef enum {
     AND, OR, NOT,
     ASSIGN,
     EQUAL, NOT_EQ, LESS, GREATER, GREATER_EQ,
+    // literals
+    LITERAL_INT, LITERAL_REAL, LITERAL_STR,
     // non-tokens
     SPACE, COMMENT
 } token_types;

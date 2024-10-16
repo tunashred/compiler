@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "lexer.h"
@@ -33,6 +34,14 @@ char* copy_slice(char* dst, const char* begin, const char* end) {
     }
     *new_str = '\0';
     return dst;
+}
+
+int is_int_literal(const char* p_ch) {
+    const char* p_temp = p_ch;
+    while(isdigit(*p_temp)) {
+        p_temp++;
+    }
+    return p_temp - p_ch;
 }
 
 void tokenize(const char* p_ch) {
@@ -143,7 +152,7 @@ void tokenize(const char* p_ch) {
                 return;
 
             default:
-                if ( (isalpha(*p_ch) || *p_ch == '_') || isdigit(*p_ch)) {
+                if ( (isalpha(*p_ch) || *p_ch == '_')) {
                     for (start = p_ch++; isalnum(*p_ch) || *p_ch == '_'; p_ch++) {}
                     char* text = copy_slice(buf, start, p_ch);
                     if (!strcmp(text, "int")) {
@@ -152,15 +161,18 @@ void tokenize(const char* p_ch) {
                         addTk(TYPE_REAL);
                     } else if (!strcmp(text, "char")) {
                         addTk(TYPE_STR);
-                    } else if (isdigit(*text)) {
-                        // though, this is not very elegant. 
-                        // I should treat strings too.. and such treatment must be generalised based on the
-                        // operators
-                        if(prev_tk_code == LPAR || (prev_tk_code >= ADD && prev_tk_code <= GREATER_EQ)) {
-                            tk = addTk(ID);
-                            strcpy(tk->text, text);
-                        }
+                    } else { // this case occurs more often than the ones above. I should move it higher
+                        tk = addTk(ID);
+                        strcpy(tk->text, text);
                     }
+                } else if (isdigit(*p_ch)) {
+                    int end;
+                    if( (end = is_int_literal(p_ch)) ) {
+                        char* int_string = copy_slice(buf, p_ch, p_ch + end);
+                        tk = addTk(LITERAL_INT);
+                        tk->i = atoi(int_string);
+                    }
+                    p_ch += end;
                 } else {
                     err("Invalid char: %c (%d)", *p_ch, *p_ch);
                 }
@@ -200,6 +212,9 @@ const char* getTokenTypeName(token_types code) {
         case LESS: return "LESS";
         case GREATER: return "GREATER";
         case GREATER_EQ: return "GREATER_EQ";
+        case LITERAL_INT: return "LITERAL_INT";
+        case LITERAL_REAL: return "LITERAL_REAL";
+        case LITERAL_STR: return "LITERAL_STR";
         case SPACE: return "SPACE";
         case COMMENT: return "COMMENT";
         default: return "UNKNOWN";
