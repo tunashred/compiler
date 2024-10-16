@@ -36,6 +36,12 @@ typedef struct {
 extern Token tokens[];
 extern int numTokens;
 
+Token* addTk(int code);
+
+char* copy_slice(char* dst, const char* begin, const char* end);
+
+int is_int_literal(const char* p_ch);
+
 void tokenize(const char* pch);
 
 const char* getTokenTypeName(token_types code);
