@@ -1,1 +1,5 @@
-# comment
+var i:int;
+i=0;    # iterator
+i + 2;
+i > 5.2;
+i > 6986543.23143;

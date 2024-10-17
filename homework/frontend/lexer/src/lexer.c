@@ -26,7 +26,7 @@ Token* addTk(int code) {
 char* copy_slice(char* dst, const char* begin, const char* end) {
     char* new_str = dst;
     if (end - begin > MAX_STR) {
-        err("String is too long\n");
+        err("String is too long at line %d\n", line);
     }
 
     while (begin != end) {
@@ -36,12 +36,41 @@ char* copy_slice(char* dst, const char* begin, const char* end) {
     return dst;
 }
 
-int is_int_literal(const char* p_ch) {
-    const char* p_temp = p_ch;
-    while(isdigit(*p_temp)) {
-        p_temp++;
+int scan_int(const char* start) {
+    const char* current = start;
+    while (isdigit(*current)) {
+        current++;
     }
-    return p_temp - p_ch;
+
+    return current - start;
+}
+
+int scan_real(const char* start) {
+    const char* current = start;
+    bool has_digits_before_dot = false, has_dot = false, has_digits_after_dot = false;
+
+    while (isdigit(*current)) {
+        current++;
+        has_digits_before_dot = true;
+    }
+
+    if (*current == '.') {
+        has_dot = 1;
+        current++;
+    } else {
+        return 0;
+    }
+
+    while (isdigit(*current)) {
+        current++;
+        has_digits_after_dot = true;
+    }
+
+    if (!has_digits_before_dot && !has_digits_after_dot) {
+        return 0;
+    }
+
+    return current - start;
 }
 
 void tokenize(const char* p_ch) {
@@ -49,7 +78,6 @@ void tokenize(const char* p_ch) {
     Token* tk;
     char buf[MAX_STR + 1];
     for (;;) {
-        int prev_tk_code = tokens[numTokens - 1].code;
         switch (*p_ch) {
             case '#':
                 for(start = p_ch++; *p_ch != '\n'; p_ch++) {}
@@ -145,7 +173,9 @@ void tokenize(const char* p_ch) {
                     p_ch += 2;
                 } else {
                     addTk(GREATER);
+                    p_ch++;
                 }
+                break;
 
             case '\0':
                 addTk(FINISH);
@@ -161,16 +191,25 @@ void tokenize(const char* p_ch) {
                         addTk(TYPE_REAL);
                     } else if (!strcmp(text, "char")) {
                         addTk(TYPE_STR);
+                    } else if (!strcmp(text, "var")) {
+                        addTk(VAR);
                     } else { // this case occurs more often than the ones above. I should move it higher
                         tk = addTk(ID);
                         strcpy(tk->text, text);
                     }
                 } else if (isdigit(*p_ch)) {
                     int end;
-                    if( (end = is_int_literal(p_ch)) ) {
-                        char* int_string = copy_slice(buf, p_ch, p_ch + end);
+                    char* temp_str;
+                    if ((end = scan_real(p_ch))) {
+                        temp_str = copy_slice(buf, p_ch, p_ch + end);
+                        tk = addTk(LITERAL_REAL);
+                        tk->r = atof(temp_str);
+                    } else if ((end = scan_int(p_ch))) {
+                        temp_str = copy_slice(buf, p_ch, p_ch + end);
                         tk = addTk(LITERAL_INT);
-                        tk->i = atoi(int_string);
+                        tk->i = atoi(temp_str);
+                    } else {
+                        err("Invalid number literal at line %d\n", line);
                     }
                     p_ch += end;
                 } else {
