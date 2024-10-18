@@ -289,3 +289,16 @@ void showTokens() {
         printf("Line: %4d, code: %2d %8s\n", tk->line, tk->code, getTokenTypeName(tk->code));
     }
 }
+
+void showPrettyTokens() {
+    int current_line = 0;
+    for (int i = 0; i < numTokens; i++) {
+        if (current_line < tokens[i].line) {
+            current_line = tokens[i].line;
+            printf("\n%4d:", tokens[i].line);
+        }
+
+        printf(" %s", getTokenTypeName(tokens[i].code));
+    }
+    printf("\n");
+}

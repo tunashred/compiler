@@ -10,9 +10,7 @@ typedef enum {
     COMMA, COLON, SEMICOLON, LPAR, RPAR, FINISH,
     // operators
     ADD, SUB, MUL, DIV,
-    AND, OR, NOT,
-    ASSIGN,
-    EQUAL, NOT_EQ, LESS, GREATER, GREATER_EQ,
+    AND, OR, NOT, ASSIGN, EQUAL, NOT_EQ, LESS, GREATER, GREATER_EQ,
     // literals
     LITERAL_INT, LITERAL_REAL, LITERAL_STR,
     // non-tokens
@@ -51,5 +49,7 @@ void tokenize(const char* pch);
 const char* getTokenTypeName(token_types code);
 
 void showTokens();
+
+void showPrettyTokens();
 
 #endif
