@@ -148,11 +148,15 @@ void tokenize(const char* p_ch) {
                 break;
 
             case '&':
-                addTk(AND);
+                if (p_ch[1] == '&') {
+                    addTk(AND);
+                }
                 p_ch++;
                 break;
             case '|':
-                addTk(OR);
+                if (p_ch[1] == '|') {
+                    addTk(OR);
+                }
                 p_ch++;
                 break;
             case '!':
