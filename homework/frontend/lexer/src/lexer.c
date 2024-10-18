@@ -73,6 +73,17 @@ int scan_real(const char* start) {
     return current - start;
 }
 
+int scan_str(const char* start) {
+    const char* current = start;
+    current++;
+
+    while (*current != '"') {
+        current++;
+    }
+
+    return current - start;
+}
+
 void tokenize(const char* p_ch) {
     const char* start;
     Token* tk;
@@ -127,7 +138,7 @@ void tokenize(const char* p_ch) {
                 addTk(SUB);
                 p_ch++;
                 break;
-            case '*': // hmm, this means the language does not support pointers
+            case '*':
                 addTk(MUL);
                 p_ch++;
                 break;
@@ -208,9 +219,21 @@ void tokenize(const char* p_ch) {
                         temp_str = copy_slice(buf, p_ch, p_ch + end);
                         tk = addTk(LITERAL_INT);
                         tk->i = atoi(temp_str);
+                    } else if ( (end = scan_str(p_ch)) ) {
+                        temp_str = copy_slice(buf, p_ch, p_ch + end - 1);
+                        tk = addTk(LITERAL_STR);
+                        strcpy(tk->text, temp_str);
                     } else {
                         err("Invalid number literal at line %d\n", line);
                     }
+                    p_ch += end;
+                } else if (*p_ch == '"') {
+                    int end = scan_str(p_ch);
+                    char* temp_str;
+                    p_ch++;
+                    temp_str = copy_slice(buf, p_ch, p_ch + end - 1);
+                    tk = addTk(LITERAL_STR);
+                    strcpy(tk->text, temp_str);
                     p_ch += end;
                 } else {
                     err("Invalid char: %c (%d)", *p_ch, *p_ch);

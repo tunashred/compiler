@@ -40,7 +40,11 @@ Token* addTk(int code);
 
 char* copy_slice(char* dst, const char* begin, const char* end);
 
-int is_int_literal(const char* p_ch);
+int scan_int(const char* start);
+
+int scan_real(const char* start);
+
+int scan_str(const char* start);
 
 void tokenize(const char* pch);
 

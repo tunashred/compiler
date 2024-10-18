@@ -3,3 +3,4 @@ i=0;    # iterator
 i + 2;
 i > 5.2;
 i > 6986543.23143;
+i = "lingura"; k = 2;
