@@ -47,7 +47,7 @@ int scan_int(const char* start) {
 
 int scan_real(const char* start) {
     const char* current = start;
-    bool has_digits_before_dot = false, has_dot = false, has_digits_after_dot = false;
+    bool has_digits_before_dot = false, has_digits_after_dot = false;
 
     while (isdigit(*current)) {
         current++;
@@ -55,7 +55,6 @@ int scan_real(const char* start) {
     }
 
     if (*current == '.') {
-        has_dot = 1;
         current++;
     } else {
         return 0;
@@ -160,7 +159,7 @@ void tokenize(const char* p_ch) {
                 p_ch++;
                 break;
             case '!':
-                if(p_ch[1] == '=') {
+                if (p_ch[1] == '=') {
                     addTk(NOT_EQ);
                     p_ch += 2;
                 } else {
@@ -183,7 +182,7 @@ void tokenize(const char* p_ch) {
                 p_ch++;
                 break;
             case '>':
-                if(p_ch[1] == '=') {
+                if (p_ch[1] == '=') {
                     addTk(GREATER_EQ);
                     p_ch += 2;
                 } else {
@@ -197,7 +196,7 @@ void tokenize(const char* p_ch) {
                 return;
 
             default:
-                if ( (isalpha(*p_ch) || *p_ch == '_')) {
+                if ( (isalpha(*p_ch) || *p_ch == '_') ) {
                     for (start = p_ch++; isalnum(*p_ch) || *p_ch == '_'; p_ch++) {}
                     char* text = copy_slice(buf, start, p_ch);
                     if (!strcmp(text, "int")) {
@@ -208,10 +207,24 @@ void tokenize(const char* p_ch) {
                         addTk(TYPE_STR);
                     } else if (!strcmp(text, "var")) {
                         addTk(VAR);
-                    } else { // this case occurs more often than the ones above. I should move it higher
+                    } else if (!strcmp(text, "function")) {
+                        addTk(FUNCTION);
+                    } else if (!strcmp(text, "if")) {
+                        addTk(IF);
+                    } else if (!strcmp(text, "else")) {
+                        addTk(ELSE);
+                    } else if (!strcmp(text, "while")) {
+                        addTk(WHILE);
+                    } else if (!strcmp(text, "end")) {
+                        addTk(END);
+                    } else if (!strcmp(text, "return")) {
+                        addTk(RETURN);
+                    }
+                    else { // this case occurs more often than the ones above. I should move it higher
                         tk = addTk(ID);
                         strcpy(tk->text, text);
                     }
+
                 } else if (isdigit(*p_ch)) {
                     int end;
                     char* temp_str;
@@ -231,6 +244,7 @@ void tokenize(const char* p_ch) {
                         err("Invalid number literal at line %d\n", line);
                     }
                     p_ch += end;
+
                 } else if (*p_ch == '"') {
                     int end = scan_str(p_ch);
                     char* temp_str;
