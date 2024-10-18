@@ -17,6 +17,11 @@ typedef enum {
     SPACE, COMMENT
 } token_types;
 
+typedef enum {
+    NAME,
+    SYMBOL
+} token_print_mode;
+
 #define MAX_STR 127
 
 typedef struct {
@@ -45,11 +50,5 @@ int scan_real(const char* start);
 int scan_str(const char* start);
 
 void tokenize(const char* pch);
-
-const char* getTokenTypeName(token_types code);
-
-void showTokens();
-
-void showPrettyTokens();
 
 #endif

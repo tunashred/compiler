@@ -86,7 +86,7 @@ int scan_str(const char* start) {
 void tokenize(const char* p_ch) {
     const char* start;
     Token* tk;
-    char buf[MAX_STR + 1];
+    char buffer[MAX_STR + 1];
     for (;;) {
         switch (*p_ch) {
             case '#':
@@ -198,7 +198,7 @@ void tokenize(const char* p_ch) {
             default:
                 if ( (isalpha(*p_ch) || *p_ch == '_') ) {
                     for (start = p_ch++; isalnum(*p_ch) || *p_ch == '_'; p_ch++) {}
-                    char* text = copy_slice(buf, start, p_ch);
+                    char* text = copy_slice(buffer, start, p_ch);
                     if (!strcmp(text, "int")) {
                         addTk(TYPE_INT);
                     } else if (!strcmp(text, "float")) { // do we want double or float?
@@ -229,15 +229,15 @@ void tokenize(const char* p_ch) {
                     int end;
                     char* temp_str;
                     if ((end = scan_real(p_ch))) {
-                        temp_str = copy_slice(buf, p_ch, p_ch + end);
+                        temp_str = copy_slice(buffer, p_ch, p_ch + end);
                         tk = addTk(LITERAL_REAL);
                         tk->r = atof(temp_str);
                     } else if ((end = scan_int(p_ch))) {
-                        temp_str = copy_slice(buf, p_ch, p_ch + end);
+                        temp_str = copy_slice(buffer, p_ch, p_ch + end);
                         tk = addTk(LITERAL_INT);
                         tk->i = atoi(temp_str);
                     } else if ( (end = scan_str(p_ch)) ) {
-                        temp_str = copy_slice(buf, p_ch, p_ch + end - 1);
+                        temp_str = copy_slice(buffer, p_ch, p_ch + end - 1);
                         tk = addTk(LITERAL_STR);
                         strcpy(tk->text, temp_str);
                     } else {
@@ -249,7 +249,7 @@ void tokenize(const char* p_ch) {
                     int end = scan_str(p_ch);
                     char* temp_str;
                     p_ch++;
-                    temp_str = copy_slice(buf, p_ch, p_ch + end - 1);
+                    temp_str = copy_slice(buffer, p_ch, p_ch + end - 1);
                     tk = addTk(LITERAL_STR);
                     strcpy(tk->text, temp_str);
                     p_ch += end;
@@ -258,65 +258,4 @@ void tokenize(const char* p_ch) {
                 }
         }
     }
-}
-
-const char* getTokenTypeName(token_types code) {
-    switch (code) {
-        case ID: return "ID";
-        case VAR: return "VAR";
-        case FUNCTION: return "FUNCTION";
-        case IF: return "IF";
-        case ELSE: return "ELSE";
-        case WHILE: return "WHILE";
-        case END: return "END";
-        case RETURN: return "RETURN";
-        case TYPE_INT: return "TYPE_INT";
-        case TYPE_REAL: return "TYPE_REAL";
-        case TYPE_STR: return "TYPE_STR";
-        case COMMA: return "COMMA";
-        case COLON: return "COLON";
-        case SEMICOLON: return "SEMICOLON";
-        case LPAR: return "LPAR";
-        case RPAR: return "RPAR";
-        case FINISH: return "FINISH";
-        case ADD: return "ADD";
-        case SUB: return "SUB";
-        case MUL: return "MUL";
-        case DIV: return "DIV";
-        case AND: return "AND";
-        case OR: return "OR";
-        case NOT: return "NOT";
-        case ASSIGN: return "ASSIGN";
-        case EQUAL: return "EQUAL";
-        case NOT_EQ: return "NOT_EQ";
-        case LESS: return "LESS";
-        case GREATER: return "GREATER";
-        case GREATER_EQ: return "GREATER_EQ";
-        case LITERAL_INT: return "LITERAL_INT";
-        case LITERAL_REAL: return "LITERAL_REAL";
-        case LITERAL_STR: return "LITERAL_STR";
-        case SPACE: return "SPACE";
-        case COMMENT: return "COMMENT";
-        default: return "UNKNOWN";
-    }
-}
-
-void showTokens() {
-    for (int i = 0; i < numTokens; i++) {
-        Token* tk = &tokens[i];
-        printf("Line: %4d, code: %2d %8s\n", tk->line, tk->code, getTokenTypeName(tk->code));
-    }
-}
-
-void showPrettyTokens() {
-    int current_line = 0;
-    for (int i = 0; i < numTokens; i++) {
-        if (current_line < tokens[i].line) {
-            current_line = tokens[i].line;
-            printf("\n%4d:", tokens[i].line);
-        }
-
-        printf(" %s", getTokenTypeName(tokens[i].code));
-    }
-    printf("\n");
 }

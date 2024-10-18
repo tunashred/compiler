@@ -6,7 +6,7 @@
 int main() {
     char* buffer = loadFile("../lexer/test/sample_1.txt");
     tokenize(buffer);
-    showPrettyTokens();
+    printDebugTokens();
 
     free(buffer);
     return 0;
