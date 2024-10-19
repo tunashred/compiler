@@ -1,5 +1,5 @@
-#include <stdbool.h>
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +8,7 @@
 #include "utils.h"
 
 Token tokens[MAX_TOKENS];
-int numTokens;
+int   numTokens;
 
 int line = 1;
 
@@ -17,8 +17,8 @@ Token* addTk(int code) {
         err("Reached maximum number of tokens\n");
     }
     Token* tk = &tokens[numTokens];
-    tk->code = code;
-    tk->line = line;
+    tk->code  = code;
+    tk->line  = line;
     numTokens++;
     return tk;
 }
@@ -46,8 +46,8 @@ int scan_int(const char* start) {
 }
 
 int scan_real(const char* start) {
-    const char* current = start;
-    bool has_digits_before_dot = false, has_digits_after_dot = false;
+    const char* current               = start;
+    bool        has_digits_before_dot = false, has_digits_after_dot = false;
 
     while (isdigit(*current)) {
         current++;
@@ -85,12 +85,12 @@ int scan_str(const char* start) {
 
 void tokenize(const char* p_ch) {
     const char* start;
-    Token* tk;
-    char buffer[MAX_STR + 1];
+    Token*      tk;
+    char        buffer[MAX_STR + 1];
     for (;;) {
         switch (*p_ch) {
             case '#':
-                for(start = p_ch++; *p_ch != '\n'; p_ch++) {}
+                for (start = p_ch++; *p_ch != '\n'; p_ch++) {}
                 line++;
                 p_ch++;
                 break;
@@ -196,7 +196,7 @@ void tokenize(const char* p_ch) {
                 return;
 
             default:
-                if ( (isalpha(*p_ch) || *p_ch == '_') ) {
+                if ((isalpha(*p_ch) || *p_ch == '_')) {
                     for (start = p_ch++; isalnum(*p_ch) || *p_ch == '_'; p_ch++) {}
                     char* text = copy_slice(buffer, start, p_ch);
                     if (!strcmp(text, "int")) {
@@ -219,26 +219,25 @@ void tokenize(const char* p_ch) {
                         addTk(END);
                     } else if (!strcmp(text, "return")) {
                         addTk(RETURN);
-                    }
-                    else { // this case occurs more often than the ones above. I should move it higher
+                    } else { // this case occurs more often than the ones above. I should move it higher
                         tk = addTk(ID);
                         strcpy(tk->text, text);
                     }
 
                 } else if (isdigit(*p_ch)) {
-                    int end;
+                    int   end;
                     char* temp_str;
                     if ((end = scan_real(p_ch))) {
                         temp_str = copy_slice(buffer, p_ch, p_ch + end);
-                        tk = addTk(LITERAL_REAL);
-                        tk->r = atof(temp_str);
+                        tk       = addTk(LITERAL_REAL);
+                        tk->r    = atof(temp_str);
                     } else if ((end = scan_int(p_ch))) {
                         temp_str = copy_slice(buffer, p_ch, p_ch + end);
-                        tk = addTk(LITERAL_INT);
-                        tk->i = atoi(temp_str);
-                    } else if ( (end = scan_str(p_ch)) ) {
+                        tk       = addTk(LITERAL_INT);
+                        tk->i    = atoi(temp_str);
+                    } else if ((end = scan_str(p_ch))) {
                         temp_str = copy_slice(buffer, p_ch, p_ch + end - 1);
-                        tk = addTk(LITERAL_STR);
+                        tk       = addTk(LITERAL_STR);
                         strcpy(tk->text, temp_str);
                     } else {
                         err("Invalid number literal at line %d\n", line);
@@ -246,11 +245,11 @@ void tokenize(const char* p_ch) {
                     p_ch += end;
 
                 } else if (*p_ch == '"') {
-                    int end = scan_str(p_ch);
+                    int   end = scan_str(p_ch);
                     char* temp_str;
                     p_ch++;
                     temp_str = copy_slice(buffer, p_ch, p_ch + end - 1);
-                    tk = addTk(LITERAL_STR);
+                    tk       = addTk(LITERAL_STR);
                     strcpy(tk->text, temp_str);
                     p_ch += end;
                 } else {

@@ -1,6 +1,7 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+// clang-format off
 typedef enum {
     ID,
     // keywords
@@ -17,10 +18,9 @@ typedef enum {
     SPACE, COMMENT
 } token_types;
 
-typedef enum {
-    NAME,
-    SYMBOL
-} token_print_mode;
+// clang-format on
+
+typedef enum { NAME, SYMBOL } token_print_mode;
 
 #define MAX_STR 127
 
@@ -29,15 +29,15 @@ typedef struct {
     int line;
 
     union {
-        char text[MAX_STR + 1];
-        int i;
+        char   text[MAX_STR + 1];
+        int    i;
         double r;
     };
 } Token;
 
 #define MAX_TOKENS 4096
 extern Token tokens[];
-extern int numTokens;
+extern int   numTokens;
 
 Token* addTk(int code);
 

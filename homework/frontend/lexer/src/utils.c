@@ -29,10 +29,10 @@ char* loadFile(const char* fileName) {
         err("Can't open file %s", fileName);
     }
     fseek(file, 0, SEEK_END);
-    size_t file_size = (size_t) ftell(file);
+    size_t file_size = (size_t)ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    char* buf    = (char*) safeMalloc(file_size + 1);
+    char*  buf   = (char*)safeMalloc(file_size + 1);
     size_t nRead = fread(buf, sizeof(char), file_size, file);
 
     fclose(file);
@@ -101,13 +101,13 @@ const char* convertTokenCode(Token* tk, int mode) { // TODO: there's gotta be a 
 
         case MUL:
             if (mode == SYMBOL) {
-                return "*";   
+                return "*";
             }
             return "MUL";
 
         case DIV:
             if (mode == SYMBOL) {
-                return "/";   
+                return "/";
             }
             return "DIV";
 
@@ -167,23 +167,40 @@ const char* convertTokenCode(Token* tk, int mode) { // TODO: there's gotta be a 
             }
             return "LITERAL_STR";
 
-        case VAR: return "VAR";
-        case FUNCTION: return "FUNCTION";
-        case IF: return "IF";
-        case ELSE: return "ELSE";
-        case WHILE: return "WHILE";
-        case END: return "END";
-        case RETURN: return "RETURN";
-        case TYPE_INT: return "TYPE_INT";
-        case TYPE_REAL: return "TYPE_REAL";
-        case TYPE_STR: return "TYPE_STR";
-        case FINISH: return "FINISH";
-        case AND: return "AND";
-        case OR: return "OR";
-        case NOT: return "NOT";
-        case SPACE: return "SPACE";
-        case COMMENT: return "COMMENT";
-        default: return "UNKNOWN";
+        case VAR:
+            return "VAR";
+        case FUNCTION:
+            return "FUNCTION";
+        case IF:
+            return "IF";
+        case ELSE:
+            return "ELSE";
+        case WHILE:
+            return "WHILE";
+        case END:
+            return "END";
+        case RETURN:
+            return "RETURN";
+        case TYPE_INT:
+            return "TYPE_INT";
+        case TYPE_REAL:
+            return "TYPE_REAL";
+        case TYPE_STR:
+            return "TYPE_STR";
+        case FINISH:
+            return "FINISH";
+        case AND:
+            return "AND";
+        case OR:
+            return "OR";
+        case NOT:
+            return "NOT";
+        case SPACE:
+            return "SPACE";
+        case COMMENT:
+            return "COMMENT";
+        default:
+            return "UNKNOWN";
     }
 }
 
@@ -207,17 +224,18 @@ void printPrettyTokens() {
     printf("\n");
 }
 
+// postponing this until i might really need it
 void printDebugTokens() {
-    int current_line = 0;
+    int         current_line = 0;
     static char buffer[MAX_STR * 3];
     for (int i = 0; i < numTokens; i++) {
         if (tokens[i].code == ID) {
-            if(!contains(buffer, tokens[i].text)) { // TODO: move this to a separate function
+            if (!contains(buffer, tokens[i].text)) { // TODO: move this to a separate function
                 strcat(buffer, "{");
                 strcat(buffer, tokens[i].text);
                 strcat(buffer, ":");
                 strcat(buffer, convertTokenCode(&tokens[i], SYMBOL));
-                strcat(buffer, "}");
+                strcat(buffer, "} ");
             }
         }
         if (current_line < tokens[i].line) {

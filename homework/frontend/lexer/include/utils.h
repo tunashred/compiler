@@ -1,8 +1,8 @@
 #ifndef LEXER_UTILS_H
 #define LEXER_UTILS_H
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 #include "lexer.h"
 
