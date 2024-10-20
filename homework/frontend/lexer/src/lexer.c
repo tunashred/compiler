@@ -13,7 +13,7 @@ int line = 1;
 
 Token* addTk(int code) {
     if (numTokens == MAX_TOKENS) {
-        err("Reached maximum number of tokens: %d\n", MAX_TOKENS);
+        err("Reached maximum number of tokens: %d", MAX_TOKENS);
     }
     Token* tk = &tokens[numTokens];
     tk->code  = code;
@@ -25,7 +25,7 @@ Token* addTk(int code) {
 char* copy_slice(char* dst, const char* begin, const char* len) {
     char* new_str = dst;
     if (len - begin > MAX_STR) {
-        err("String is too long, at line: %d\n", line);
+        err("String is too long, at line: %d", line);
     }
 
     while (begin != len) {
@@ -64,7 +64,7 @@ int scan_real(const char* start) {
     }
 
     if (!has_digits_before_dot || !has_digits_after_dot) {
-        err("Malformed floating point number, at line: %d\n", line);
+        err("Malformed floating point number, at line: %d", line);
     }
 
     return current - start;
@@ -72,8 +72,21 @@ int scan_real(const char* start) {
 
 int scan_str(const char* start) {
     const char* current = start + 1;
-    while (*current != '"') {
-        current++;
+    while (*current != '"' && *current != '\0') {
+        if(*current == '\n') {
+            err("String does not end at line it begins, at line: %d", line);
+        }
+        
+        if (*current == '\\') {
+            current++;
+            if(*current == 'n' || *current == 'r' || *current == 't' || *current == '\\' || *current == '"') {
+                current++;
+            } else {
+                err("Invalid escape sequence, at line: %d", line);
+            }
+        } else {
+            current++;
+        }
     }
     return current - start;
 }
@@ -232,7 +245,7 @@ void tokenize(const char* p_ch) {
                         tk       = addTk(LITERAL_INT);
                         tk->i    = atoi(temp_str);
                     } else {
-                        err("Invalid number literal, at line %d\n", line);
+                        err("Invalid number literal, at line %d", line);
                     }
                     p_ch += len;
 

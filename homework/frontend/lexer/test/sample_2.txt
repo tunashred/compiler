@@ -1,4 +1,9 @@
+k == 2.0;
+#good food bruh k < "a";
+k >= "buboi_cafd\n\t\"f9324nfgid" # ce peste bun am mancat
 var i:int;
+#huiehue :?"P#(*Ynmh89r3)
+
 i=0;    # iterator
 i + 2;
 i > 5.2;
