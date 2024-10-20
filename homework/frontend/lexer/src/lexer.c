@@ -15,6 +15,9 @@ Token* addTk(int code) {
     if (numTokens == MAX_TOKENS) {
         err("Reached maximum number of tokens: %d", MAX_TOKENS);
     }
+    if (code < ID || code >= COMMENT) {
+        err("Invalid token code %d, at line %d", code, line);
+    }
     Token* tk = &tokens[numTokens];
     tk->code  = code;
     tk->line  = line;
@@ -22,13 +25,13 @@ Token* addTk(int code) {
     return tk;
 }
 
-char* copy_slice(char* dst, const char* begin, const char* len) {
+char* copy_slice(char* dst, const char* begin, const char* end) {
     char* new_str = dst;
-    if (len - begin > MAX_STR) {
+    if (end - begin > MAX_STR) {
         err("String is too long, at line: %d", line);
     }
 
-    while (begin != len) {
+    while (begin != end) {
         *new_str++ = *begin++;
     }
     *new_str = '\0';
@@ -37,7 +40,10 @@ char* copy_slice(char* dst, const char* begin, const char* len) {
 
 int scan_int(const char* start) {
     const char* current = start;
-    while (isdigit(*current)) { // if end char is alphanum, then should it err?
+    if(*current == '+' || *current == '-' || isdigit(current[1])) {
+        current++;
+    }
+    while (isdigit(*current)) { // if end char is alpha, then should it err?
         current++;
     }
     return current - start;
@@ -46,6 +52,9 @@ int scan_int(const char* start) {
 int scan_real(const char* start) {
     const char* current               = start;
     bool        has_digits_before_dot = false, has_digits_after_dot = false;
+    if(*current == '+' || *current == '-' || isdigit(current[1])) {
+        current++;
+    }
 
     while (isdigit(*current)) {
         current++;
@@ -89,6 +98,28 @@ int scan_str(const char* start) {
         }
     }
     return current - start;
+}
+
+// maybe this can become universal.. for string and future types
+Token* add_literal_tk(const char* start, int len, int tk_code, void* (*p_func_convert)(const char*)) {
+    if (!start || len <= 0) {
+        err("Bad arguments when trying to add token, at line: %d\n", line);
+        return NULL;
+    }
+
+    Token* tk;
+    char buffer[MAX_STR + 1];
+    char* temp_str = copy_slice(buffer, start, start + len);
+
+    tk = addTk(tk_code);
+
+    if (tk_code == LITERAL_INT) {
+        tk->i = ((int (*)(const char*))p_func_convert)(temp_str);
+    } else if (tk_code == LITERAL_REAL) {
+        tk->r = ((double (*)(const char*))p_func_convert)(temp_str);
+    }
+
+    return tk;
 }
 
 void tokenize(const char* p_ch) {
@@ -140,14 +171,34 @@ void tokenize(const char* p_ch) {
                 p_ch++;
                 break;
 
-            case '+': // maybe for increment too; ++
-                addTk(ADD);
-                p_ch++;
+            case '+':
+                if (p_ch[1] == '.' || isdigit(p_ch[1])) {
+                    if ((len = scan_real(p_ch))) {
+                        add_literal_tk(p_ch, len, LITERAL_REAL, (void*)atof);
+                    } else if ((len = scan_int(p_ch))) {
+                        add_literal_tk(p_ch, len, LITERAL_INT, (void*)atoi);
+                    }
+                    p_ch += len;
+                } else {
+                    addTk(ADD);
+                    p_ch++;
+                }
                 break;
+
             case '-':
-                addTk(SUB);
-                p_ch++;
+                if (p_ch[1] == '.' || isdigit(p_ch[1])) {
+                    if ((len = scan_real(p_ch))) {
+                        add_literal_tk(p_ch, len, LITERAL_REAL, (void*)atof);
+                    } else if ((len = scan_int(p_ch))) {
+                        add_literal_tk(p_ch, len, LITERAL_INT, (void*)atoi);
+                    }
+                    p_ch += len;
+                } else {
+                    addTk(SUB);
+                    p_ch++;
+                }
                 break;
+
             case '*':
                 addTk(MUL);
                 p_ch++;

@@ -43,7 +43,7 @@ char* loadFile(const char* fileName) {
     return buf;
 }
 
-const char* contains(const char* str, const char* word) { // TODO: need a fancier version
+const char* contains(const char* str, const char* word) { // TODO: need a fancier version; Rabin-Karp or KMP
     return strstr(str, word);
 }
 
