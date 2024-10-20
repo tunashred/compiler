@@ -49,6 +49,6 @@ int scan_real(const char* start);
 
 int scan_str(const char* start);
 
-void tokenize(const char* pch);
+void tokenize(const char* p_ch);
 
 #endif
