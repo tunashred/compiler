@@ -26,15 +26,13 @@ Token* addTk(int code) {
 }
 
 char* copy_slice(char* dst, const char* begin, const char* end) {
-    char* new_str = dst;
-    if (end - begin > MAX_STR) {
+    size_t len = end - begin;
+    if (len > MAX_STR) {
         err("String is too long, at line: %d", line);
     }
 
-    while (begin != end) {
-        *new_str++ = *begin++;
-    }
-    *new_str = '\0';
+    strncpy(dst, begin, len);
+    dst[len] = '\0';
     return dst;
 }
 
@@ -101,7 +99,7 @@ int scan_str(const char* start) {
 }
 
 // maybe this can become universal.. for string and future types
-Token* add_literal_tk(const char* start, int len, int tk_code, void* (*p_func_convert)(const char*)) {
+Token* add_literal_tk(const char* start, int len, int tk_code) {
     if (!start || len <= 0) {
         err("Bad arguments when trying to add token, at line: %d\n", line);
         return NULL;
@@ -113,12 +111,15 @@ Token* add_literal_tk(const char* start, int len, int tk_code, void* (*p_func_co
 
     tk = addTk(tk_code);
 
-    if (tk_code == LITERAL_INT) {
-        tk->i = ((int (*)(const char*))p_func_convert)(temp_str);
-    } else if (tk_code == LITERAL_REAL) {
-        tk->r = ((double (*)(const char*))p_func_convert)(temp_str);
-    }
+    switch (tk_code) {
+        case LITERAL_INT:
+            tk->i = atoi(temp_str);
+            break;
 
+        case LITERAL_REAL:
+            tk->r = atof(temp_str);
+            break;
+    }
     return tk;
 }
 
@@ -174,9 +175,9 @@ void tokenize(const char* p_ch) {
             case '+':
                 if (p_ch[1] == '.' || isdigit(p_ch[1])) {
                     if ((len = scan_real(p_ch))) {
-                        add_literal_tk(p_ch, len, LITERAL_REAL, (void*)atof);
+                        add_literal_tk(p_ch, len, LITERAL_REAL);
                     } else if ((len = scan_int(p_ch))) {
-                        add_literal_tk(p_ch, len, LITERAL_INT, (void*)atoi);
+                        add_literal_tk(p_ch, len, LITERAL_INT);
                     }
                     p_ch += len;
                 } else {
@@ -188,9 +189,9 @@ void tokenize(const char* p_ch) {
             case '-':
                 if (p_ch[1] == '.' || isdigit(p_ch[1])) {
                     if ((len = scan_real(p_ch))) {
-                        add_literal_tk(p_ch, len, LITERAL_REAL, (void*)atof);
+                        add_literal_tk(p_ch, len, LITERAL_REAL);
                     } else if ((len = scan_int(p_ch))) {
-                        add_literal_tk(p_ch, len, LITERAL_INT, (void*)atoi);
+                        add_literal_tk(p_ch, len, LITERAL_INT);
                     }
                     p_ch += len;
                 } else {

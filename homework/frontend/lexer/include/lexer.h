@@ -49,7 +49,7 @@ int scan_real(const char* start);
 
 int scan_str(const char* start);
 
-Token* add_literal_tk(const char* start, int len, int tk_code, void* (*p_func_convert)(const char*));
+Token* add_literal_tk(const char* start, int len, int tk_code);
 
 void tokenize(const char* p_ch);
 

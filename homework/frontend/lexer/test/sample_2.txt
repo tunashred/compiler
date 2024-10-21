@@ -1,4 +1,4 @@
-k == 2.0;
+k == -2.0;
 #good food bruh k < "a";
 k >= "buboi_cafd\n\t\"f9324nfgid" # ce peste bun am mancat
 var i:int;
@@ -6,6 +6,6 @@ var i:int;
 
 i=0;    # iterator
 i + 2;
-i > 5.2;
+i > +5.2;
 i > 6986543.23143;
 i = "lingura"; k = 2;
