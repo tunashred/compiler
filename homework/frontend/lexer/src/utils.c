@@ -163,7 +163,7 @@ const char* convertTokenCode(Token* tk, int mode) { // TODO: there's gotta be a 
 
         case LITERAL_STR:
             if (mode == SYMBOL) {
-                return tk->text; // TODO: need to append at start and end this -> "
+                return tk->text;
             }
             return "LITERAL_STR";
 
@@ -245,7 +245,11 @@ void printDebugTokens() {
             // memset(buffer, '\0', sizeof(buffer));
         }
 
-        printf(" %s", convertTokenCode(&tokens[i], SYMBOL));
+        if (tokens[i].code == LITERAL_STR) {
+            printf(" \"%s\"", convertTokenCode(&tokens[i], SYMBOL));
+        } else {
+            printf(" %s", convertTokenCode(&tokens[i], SYMBOL));    
+        }
     }
     printf("\n");
 }
