@@ -14,7 +14,7 @@ char* loadFile(const char* fileName);
 
 const char* contains(const char* str, const char* word);
 
-const char* getTokenTypeName(token_types code, int mode);
+const char* convertTokenCode(Token* tk, int mode);
 
 void printTokens();
 

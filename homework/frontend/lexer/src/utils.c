@@ -49,7 +49,6 @@ const char* contains(const char* str, const char* word) { // TODO: need a fancie
 
 const char* convertTokenCode(Token* tk, int mode) { // TODO: there's gotta be a better way
     static char buffer[MAX_STR + 1];
-
     switch (tk->code) {
         case ID:
             if (mode == SYMBOL) {
