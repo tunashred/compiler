@@ -2,7 +2,7 @@
 #define LEXER_H
 
 #define MAX_TOKENS 4096
-extern int   numTokens;
+extern int numTokens;
 #define MAX_STR 127
 
 typedef struct {

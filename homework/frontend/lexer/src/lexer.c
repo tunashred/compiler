@@ -50,7 +50,7 @@ int scan_int(const char* start) {
 int scan_real(const char* start) {
     const char* current               = start;
     bool        has_digits_before_dot = false, has_digits_after_dot = false;
-    if(*current == '+' || *current == '-' || isdigit(current[1])) {
+    if (*current == '+' || *current == '-' || isdigit(current[1])) {
         current++;
     }
 
