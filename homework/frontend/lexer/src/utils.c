@@ -223,25 +223,12 @@ void printPrettyTokens() {
     printf("\n");
 }
 
-// postponing this until i might really need it
 void printDebugTokens() {
     int         current_line = 0;
-    // static char buffer[MAX_STR * 3];
     for (int i = 0; i < numTokens; i++) {
-        // if (tokens[i].code == ID) {
-        //     if (!contains(buffer, tokens[i].text)) { // TODO: move this to a separate function
-        //         strcat(buffer, "{");
-        //         strcat(buffer, tokens[i].text);
-        //         strcat(buffer, ":");
-        //         strcat(buffer, convertTokenCode(&tokens[i], SYMBOL));
-        //         strcat(buffer, "} ");
-        //     }
-        // }
         if (current_line < tokens[i].line) {
-            // printf("\t||\t%s", buffer);
             current_line = tokens[i].line;
             printf("\n%4d:", tokens[i].line);
-            // memset(buffer, '\0', sizeof(buffer));
         }
 
         if (tokens[i].code == LITERAL_STR) {
