@@ -30,8 +30,9 @@ endfunction()
 # Collect sources from the root directory
 collect_sources_and_includes(${CMAKE_SOURCE_DIR})
 
-# Include the lexer subdirectory
+# Include the lexer and parser subdirectories
 add_subdirectory(lexer)
+add_subdirectory(parser)
 
 # Set main file path
 set(MAIN_FILE_PATH "${CMAKE_SOURCE_DIR}/main.c")
@@ -71,28 +72,16 @@ set(COMPILE_FLAGS
 # Add compile flags
 target_compile_options(${EXECUTABLE} PRIVATE ${COMPILE_FLAGS})
 
-if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-    # GCC-specific analysis flag
-    target_compile_options(${EXECUTABLE} PRIVATE -fanalyzer)
-elseif(CMAKE_C_COMPILER_ID STREQUAL "Clang")
-    # Clang-specific analysis and debugging flags
-    target_compile_options(${EXECUTABLE} PRIVATE
-        -Xclang -analyzer-output=text  # Enables Clang Static Analyzer output
-        -Weverything                   # Turns on all warnings
-        -Wno-poison-system-directories # Disables a specific warning if not needed
-    )
-endif()
-
 # Link libraries
 target_link_options(${EXECUTABLE} PRIVATE -lm)
 
-# Release specific flags
+# Release-specific flags
 set(RELEASE_FLAGS
     -D_FORTIFY_SOURCE=2
     -O3
 )
 
-# Debug specific flags
+# Debug-specific flags
 set(DEBUG_FLAGS
     -g
     -O0
@@ -103,10 +92,7 @@ set(DEBUG_FLAGS
 
 # Apply flags based on the build type
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    add_compile_options(${RELEASE_FLAGS})
+    target_compile_options(${EXECUTABLE} PRIVATE ${RELEASE_FLAGS})
 elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_compile_options(${DEBUG_FLAGS})
+    target_compile_options(${EXECUTABLE} PRIVATE ${DEBUG_FLAGS})
 endif()
-
-# Add parser subdirectory
-add_subdirectory(parser)
