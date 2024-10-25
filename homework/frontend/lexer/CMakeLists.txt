@@ -8,8 +8,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 # Create a library from the sources in this directory
 add_library(lexer_lib ${LEXER_SOURCES})
 
-# Optionally add custom compiler flags for this directory
-target_compile_options(lexer_lib PRIVATE -Wall -Wextra)
-
 # Ensure the main executable includes the lexer headers
 target_include_directories(lexer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

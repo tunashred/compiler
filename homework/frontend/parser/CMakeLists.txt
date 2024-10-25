@@ -8,9 +8,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 # Create a library from the sources in this directory
 add_library(parser_lib ${PARSER_SOURCES})
 
-# Optionally add custom compiler flags for this directory
-target_compile_options(parser_lib PRIVATE -Wall -Wextra)
-
 # Ensure the main executable and other targets include parser headers
 target_include_directories(parser_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

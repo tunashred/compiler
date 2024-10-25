@@ -69,11 +69,11 @@ set(COMPILE_FLAGS
     -fstack-usage
 )
 
-# Add compile flags
-target_compile_options(${EXECUTABLE} PRIVATE ${COMPILE_FLAGS})
+# Apply universal compile flags to all targets
+add_compile_options(${COMPILE_FLAGS})
 
-# Link libraries
-target_link_options(${EXECUTABLE} PRIVATE -lm)
+# Link libraries ### none at the moment
+# target_link_options(${EXECUTABLE} PRIVATE -lm)
 
 # Release-specific flags
 set(RELEASE_FLAGS
@@ -92,7 +92,7 @@ set(DEBUG_FLAGS
 
 # Apply flags based on the build type
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    target_compile_options(${EXECUTABLE} PRIVATE ${RELEASE_FLAGS})
+    add_compile_options(${RELEASE_FLAGS})
 elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_options(${EXECUTABLE} PRIVATE ${DEBUG_FLAGS})
+    add_compile_options(${DEBUG_FLAGS})
 endif()
