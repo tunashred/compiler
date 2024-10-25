@@ -38,7 +38,7 @@ char* copy_slice(char* dst, const char* begin, const char* end) {
 
 int scan_int(const char* start) {
     const char* current = start;
-    if(*current == '+' || *current == '-' || isdigit(current[1])) {
+    if (*current == '+' || *current == '-' || isdigit(current[1])) {
         current++;
     }
     while (isdigit(*current)) { // if end char is alpha, then should it err?
@@ -80,13 +80,13 @@ int scan_real(const char* start) {
 int scan_str(const char* start) {
     const char* current = start + 1;
     while (*current != '"' && *current != '\0') {
-        if(*current == '\n') {
+        if (*current == '\n') {
             err("String does not end at line it begins, at line: %d", line);
         }
-        
+
         if (*current == '\\') {
             current++;
-            if(*current == 'n' || *current == 'r' || *current == 't' || *current == '\\' || *current == '"') {
+            if (*current == 'n' || *current == 'r' || *current == 't' || *current == '\\' || *current == '"') {
                 current++;
             } else {
                 err("Invalid escape sequence, at line: %d", line);
@@ -106,8 +106,8 @@ Token* add_literal_tk(const char* start, int len, int tk_code) {
     }
 
     Token* tk;
-    char buffer[MAX_STR + 1];
-    char* temp_str = copy_slice(buffer, start, start + len);
+    char   buffer[MAX_STR + 1];
+    char*  temp_str = copy_slice(buffer, start, start + len);
 
     tk = addTk(tk_code);
 
@@ -126,7 +126,7 @@ Token* add_literal_tk(const char* start, int len, int tk_code) {
 void tokenize(const char* p_ch) {
     const char* start;
     const char* temp_str;
-    int len;
+    int         len;
     Token*      tk;
     char        buffer[MAX_STR + 1];
 

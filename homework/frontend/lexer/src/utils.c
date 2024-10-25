@@ -224,7 +224,7 @@ void printPrettyTokens() {
 }
 
 void printDebugTokens() {
-    int         current_line = 0;
+    int current_line = 0;
     for (int i = 0; i < numTokens; i++) {
         if (current_line < tokens[i].line) {
             current_line = tokens[i].line;
@@ -234,7 +234,7 @@ void printDebugTokens() {
         if (tokens[i].code == LITERAL_STR) {
             printf(" \"%s\"", convertTokenCode(&tokens[i], SYMBOL));
         } else {
-            printf(" %s", convertTokenCode(&tokens[i], SYMBOL));    
+            printf(" %s", convertTokenCode(&tokens[i], SYMBOL));
         }
     }
     printf("\n");
