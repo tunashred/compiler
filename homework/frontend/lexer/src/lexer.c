@@ -282,7 +282,7 @@ void tokenize(const char* p_ch) {
                         addTk(END);
                     } else if (!strcmp(text, "return")) {
                         addTk(RETURN);
-                    } else { // this case occurs more often than the ones above. I should move it higher
+                    } else {
                         tk = addTk(ID);
                         strcpy(tk->text, text);
                     }
