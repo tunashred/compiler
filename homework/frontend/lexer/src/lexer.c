@@ -38,7 +38,7 @@ char* copy_slice(char* dst, const char* begin, const char* end) {
 
 int scan_int(const char* start) {
     const char* current = start;
-    if (*current == '+' || *current == '-' || isdigit(current[1])) {
+    if (isdigit(current[1])) {
         current++;
     }
     while (isdigit(*current)) { // if end char is alpha, then should it err?
@@ -50,7 +50,7 @@ int scan_int(const char* start) {
 int scan_real(const char* start) {
     const char* current               = start;
     bool        has_digits_before_dot = false, has_digits_after_dot = false;
-    if (*current == '+' || *current == '-' || isdigit(current[1])) {
+    if (isdigit(current[1])) {
         current++;
     }
 
@@ -173,31 +173,13 @@ void tokenize(const char* p_ch) {
                 break;
 
             case '+':
-                if (p_ch[1] == '.' || isdigit(p_ch[1])) {
-                    if ((len = scan_real(p_ch))) {
-                        add_literal_tk(p_ch, len, LITERAL_REAL);
-                    } else if ((len = scan_int(p_ch))) {
-                        add_literal_tk(p_ch, len, LITERAL_INT);
-                    }
-                    p_ch += len;
-                } else {
-                    addTk(ADD);
-                    p_ch++;
-                }
+                addTk(ADD);
+                p_ch++;
                 break;
 
             case '-':
-                if (p_ch[1] == '.' || isdigit(p_ch[1])) {
-                    if ((len = scan_real(p_ch))) {
-                        add_literal_tk(p_ch, len, LITERAL_REAL);
-                    } else if ((len = scan_int(p_ch))) {
-                        add_literal_tk(p_ch, len, LITERAL_INT);
-                    }
-                    p_ch += len;
-                } else {
-                    addTk(SUB);
-                    p_ch++;
-                }
+                addTk(SUB);
+                p_ch++;
                 break;
 
             case '*':
