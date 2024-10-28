@@ -6,7 +6,7 @@
 #include "utils.h"
 
 void err(const char* fmt, ...) {
-    fprintf(stderr, "error: ");
+    fprintf(stderr, "Error: ");
     va_list va;
     va_start(va, fmt);
     vfprintf(stderr, fmt, va);
