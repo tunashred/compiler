@@ -16,6 +16,18 @@ bool consume(int code) {
     return false;
 }
 
+bool baseType(int code) {
+    switch (code) {
+        case TYPE_INT:
+        case TYPE_REAL:
+        case TYPE_STR:
+            return true;
+        
+        default:
+            return false;
+    }
+}
+
 // // program ::= ( defVar | defFunc | block )* FINISH
 // bool program() {
 //     for (;;) {

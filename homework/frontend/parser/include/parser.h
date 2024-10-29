@@ -5,6 +5,8 @@
 
 bool consume(int code);
 
+bool baseType(int code);
+
 bool program();
 
 // parse the extracted tokens
