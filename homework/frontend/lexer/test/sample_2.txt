@@ -1,3 +1,5 @@
+function max(x:int, z:str)
+
 k == -2.0;
 #good food bruh k < "a";
 k >= "buboi_cafd\n\t\"f9324nfgid" # ce peste bun am mancat

@@ -248,7 +248,7 @@ void tokenize(const char* p_ch) {
                         addTk(TYPE_INT);
                     } else if (!strcmp(text, "float")) { // do we want double or float?
                         addTk(TYPE_REAL);
-                    } else if (!strcmp(text, "char")) {
+                    } else if (!strcmp(text, "str")) {
                         addTk(TYPE_STR);
                     } else if (!strcmp(text, "var")) {
                         addTk(VAR);
