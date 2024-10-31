@@ -15,8 +15,6 @@ bool consume(int code) {
         consumed = &tokens[iTk++];
         return true;
     }
-    // not sure if this may happen. i will just keep it for the moment
-    printf("Consume: Code or token index do not match\n");
     return false;
 }
 
@@ -33,15 +31,12 @@ bool baseType(Token* tk) {
 }
 
 bool def_var(Token *tk) {
-    if (tk->code == VAR) {
-        consume(tk->code);
-        if (tk->code == ID) {
-            consume(tk->code);
-            if (tk->code == COLON) {
+    if (consume(VAR)) {
+        if (consume(ID)) {
+            if (consume(COLON)) {
                 if (baseType(tk)) {
                     consume(tk->code);
-                    if (tk->code == SEMICOLON) {
-                        consume(tk->code);
+                    if (consume(SEMICOLON)) {
                         return true;
                     }
                 }
@@ -52,10 +47,8 @@ bool def_var(Token *tk) {
 }
 
 bool func_param(Token* tk) {
-    if (tk->code == ID) {
-        consume(tk->code);
-        if (tk->code == COLON) {
-            consume(tk->code);
+    if (consume(ID)) {
+        if (consume(COLON)) {
             if (baseType(tk)) {
                 consume(tk->code);
                 return true;
