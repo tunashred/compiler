@@ -31,6 +31,7 @@ bool baseType(Token* tk) {
 }
 
 bool def_var(Token *tk) {
+    int start = iTk;
     if (consume(VAR)) {
         if (consume(ID)) {
             if (consume(COLON)) {
@@ -43,6 +44,7 @@ bool def_var(Token *tk) {
             }
         }
     }
+    iTk = start;
     return false;
 }
 
@@ -58,6 +60,7 @@ bool func_param(Token* tk) {
     return false;
 }
 
+// TODO: a bit questionable.. incomplete parameter(s) case
 bool func_params(Token* tk) {
     if (func_param(tk)) {
         do {
