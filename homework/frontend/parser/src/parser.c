@@ -32,15 +32,11 @@ bool baseType(Token* tk) {
 
 bool def_var(Token *tk) {
     int start = iTk;
-    if (consume(VAR)) {
-        if (consume(ID)) {
-            if (consume(COLON)) {
-                if (baseType(tk)) {
-                    consume(tk->code);
-                    if (consume(SEMICOLON)) {
-                        return true;
-                    }
-                }
+    if (consume(VAR) && consume(ID) && consume(COLON)) {
+        if (baseType(tk)) {
+            consume(tk->code);
+            if (consume(SEMICOLON)) {
+                return true;
             }
         }
     }
@@ -49,12 +45,10 @@ bool def_var(Token *tk) {
 }
 
 bool func_param(Token* tk) {
-    if (consume(ID)) {
-        if (consume(COLON)) {
-            if (baseType(tk)) {
-                consume(tk->code);
-                return true;
-            }
+    if (consume(ID) && consume(COLON)) {
+        if (baseType(tk)) {
+            consume(tk->code);
+            return true;
         }
     }
     return false;
