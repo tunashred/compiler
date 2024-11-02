@@ -7,13 +7,35 @@
 
 bool consume(int code);
 
-bool baseType(Token* tk);
+bool baseType();
 
-bool def_var(Token *tk);
+bool def_var();
 
-bool func_param(Token* tk);
+bool func_param();
 
-bool func_params(Token* tk);
+bool func_params();
+
+bool block();
+
+bool def_func();
+
+bool instr();
+
+bool expr();
+
+bool expr_logic();
+
+bool expr_assign();
+
+bool expr_comp();
+
+bool expr_add();
+
+bool expr_mul();
+
+bool expr_prefix();
+
+bool factor();
 
 bool program();
 
