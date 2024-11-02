@@ -18,23 +18,24 @@ bool consume(int code) {
     return false;
 }
 
-bool baseType(Token* tk) {
-    switch (tk->code) {
+bool baseType() {
+    switch (tokens[iTk].code) {
         case TYPE_INT:
         case TYPE_REAL:
         case TYPE_STR:
+            consume(tokens[iTk].code);
             return true;
         
         default:
-            err("Invalid variable type, at line %d", tk->line);
+            err("Invalid variable type, at line %d", tokens[iTk].line);
     }
 }
 
-bool def_var(Token *tk) {
+bool def_var() {
     int start = iTk;
     if (consume(VAR) && consume(ID) && consume(COLON)) {
-        if (baseType(tk)) {
-            consume(tk->code);
+        if (baseType()) {
+            consume(tokens[iTk].code);
             if (consume(SEMICOLON)) {
                 return true;
             }
@@ -44,51 +45,71 @@ bool def_var(Token *tk) {
     return false;
 }
 
-bool func_param(Token* tk) {
+bool func_param() {
     if (consume(ID) && consume(COLON)) {
-        if (baseType(tk)) {
-            consume(tk->code);
+        if (baseType()) {
             return true;
         }
     }
     return false;
 }
 
-// TODO: a bit questionable.. incomplete parameter(s) case
-bool func_params(Token* tk) {
-    if (func_param(tk)) {
-        do {
-            if (tk->code != COMMA) {
-                break;
+bool func_params() {
+    if (func_param()) {
+        while (consume(COMMA)) {
+            if (!func_param()) {
+                err("Invalid parameter definition, at line %d", tokens[iTk].line);
             }
-            consume(tk->code);
-            if (!func_param(tk)) {
-                err("Invalid parameter definition, at line %d", tk->line);
-            }
-            consume(tk->code);
-        } while(1);
+        }
     }
-    // means we accept functions with no params
     return true;
 }
 
-// // program ::= ( defVar | defFunc | block )* FINISH
-// bool program() {
-//     for (;;) {
-//         if (defVar()) {
-//         } else if (defFunc()) {
-//         } else if (block()) {
-//         } else
-//             break;
-//     }
-//     if (consume(FINISH)) {
-//         return true;
-//     } else
-//         err("syntax error");
-//     return false;
-// }
+bool block() {
+    return true;
+}
 
-// void parse() {
-//     iTk = 0;
-//     program();
-// }
+bool def_func() {
+    int start = iTk;
+    if (consume(FUNCTION) && consume(ID) && consume(LPAR)) {
+        if (tokens[iTk].code != RPAR) {
+            func_param();
+        }
+        if (consume(RPAR) && consume(COLON) && baseType()) {
+            while(def_var()) {}
+            // will see later how to call block() here
+            block();
+            
+            // how should i detect if the function is terminated?
+            if (consume(END)) {
+                return true;
+            }
+        }
+    }
+
+    iTk = start;
+    return false;
+}
+
+// program ::= ( defVar | defFunc | block )* FINISH
+// commenting stuff which is not implemented yet
+bool program() {
+    def_func();
+    // for (;;) {
+    //     if (def_var()) {
+    //     } else if (def_func()) {
+    //     } else if (block()) {
+    //     } else
+    //         break;
+    // }
+    // if (consume(FINISH)) {
+    //     return true;
+    // } else
+    //     err("syntax error");
+    // return false;
+}
+
+void parse() {
+    iTk = 0;
+    program();
+}
