@@ -1,4 +1,7 @@
-function max(x:int, z:str)
+function max(x:int, z:str) : int
+    var x:int;
+     
+end
 
 k == -2.0;
 #good food bruh k < "a";
