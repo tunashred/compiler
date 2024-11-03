@@ -220,7 +220,7 @@ void printPrettyTokens() {
 
         printf(" %s", convertTokenCode(&tokens[i], NAME));
     }
-    printf("\n");
+    printf("\n\n");
 }
 
 void printDebugTokens() {
@@ -237,5 +237,5 @@ void printDebugTokens() {
             printf(" %s", convertTokenCode(&tokens[i], SYMBOL));
         }
     }
-    printf("\n");
+    printf("\n\n");
 }
