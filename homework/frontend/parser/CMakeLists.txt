@@ -11,5 +11,5 @@ add_library(parser_lib ${PARSER_SOURCES})
 # Ensure the main executable and other targets include parser headers
 target_include_directories(parser_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# Link the lexer_lib to parser_lib
-target_link_libraries(parser_lib PUBLIC lexer_lib)
+# Link common_flags to parser_lib
+target_link_libraries(parser_lib PUBLIC common_flags lexer_lib)

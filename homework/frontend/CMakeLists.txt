@@ -46,17 +46,11 @@ set(EXECUTABLE "college-compiler")
 # Add executable target with the collected source files
 add_executable(${EXECUTABLE} ${ROOT_SOURCES} ${MAIN_FILE_PATH})
 
-# Link the lexer and parser libraries
-target_link_libraries(${EXECUTABLE} lexer_lib parser_lib)
-
-# Include lexer and parser directories for the main executable
-target_include_directories(${EXECUTABLE} PRIVATE
-    ${CMAKE_SOURCE_DIR}/lexer/include
-    ${CMAKE_SOURCE_DIR}/parser/include
-)
+# Create an INTERFACE library for common flags
+add_library(common_flags INTERFACE)
 
 # Universal compile flags
-set(COMPILE_FLAGS
+target_compile_options(common_flags INTERFACE
     -Wall
     -Wextra
     -pthread
@@ -69,30 +63,21 @@ set(COMPILE_FLAGS
     -fstack-usage
 )
 
-# Apply universal compile flags to all targets
-add_compile_options(${COMPILE_FLAGS})
-
-# Link libraries ### none at the moment
-# target_link_options(${EXECUTABLE} PRIVATE -lm)
-
 # Release-specific flags
-set(RELEASE_FLAGS
-    -D_FORTIFY_SOURCE=2
-    -O3
+target_compile_options(common_flags INTERFACE
+    "$<$<CONFIG:Release>:-D_FORTIFY_SOURCE=2;-O3>"
 )
 
 # Debug-specific flags
-set(DEBUG_FLAGS
-    -g
-    -O0
-    -fverbose-asm
-    -finstrument-functions
-    -fno-inline
+target_compile_options(common_flags INTERFACE
+    "$<$<CONFIG:Debug>:-g;-O0;-fverbose-asm;-finstrument-functions;-fno-inline>"
 )
 
-# Apply flags based on the build type
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    add_compile_options(${RELEASE_FLAGS})
-elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_compile_options(${DEBUG_FLAGS})
-endif()
+# Link common_flags to lexer_lib, parser_lib, and the main executable
+target_link_libraries(${EXECUTABLE} PRIVATE common_flags lexer_lib parser_lib)
+
+# Include lexer and parser directories for the main executable
+target_include_directories(${EXECUTABLE} PRIVATE
+    ${CMAKE_SOURCE_DIR}/lexer/include
+    ${CMAKE_SOURCE_DIR}/parser/include
+)

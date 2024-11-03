@@ -10,3 +10,6 @@ add_library(lexer_lib ${LEXER_SOURCES})
 
 # Ensure the main executable includes the lexer headers
 target_include_directories(lexer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Link common_flags to lexer_lib
+target_link_libraries(lexer_lib PUBLIC common_flags)
