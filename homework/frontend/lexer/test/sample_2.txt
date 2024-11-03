@@ -1,7 +1,15 @@
 function max(x:int, z:str) : int
     var x:int;
-     
+    # sdadfs fdsf dsfsd dfgggfd var a + sa;     
 end
+
+# function without args
+function emptyFunc() : int
+    var x:int;
+    x = 10;
+    return x;
+end
+
 
 k = -2.0;
 #good food bruh k < "a";
@@ -13,6 +21,10 @@ i=0;    # iterator
 i = x + 2;
 if (i > 5.2)
     return z;
+end
+
+function add(a:int, b:int) : int
+    return a + b;
 end
 
 i > 6986543.23143;

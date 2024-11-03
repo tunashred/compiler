@@ -54,3 +54,91 @@ if ( (x = moo (12)) < 2)
     print(wow it works);
 end
 
+var result:int;
+result = (3 + 5) * (10 / 2) - 7;
+
+
+# function with multiple var declarations
+function multiVar() : int
+    var a:int;
+    var b:int;
+    a = 10;
+    b = a + 5;
+    return b;
+end
+
+# multiple comparisons inside if statement
+if (a > 10 && b < 20 || c == 15)
+    a = b + c;
+end
+
+#complex nesting
+function complexLogic(a:int, b:int) : int
+    if (a > b)
+        if (b > 0)
+            return a;
+        else
+            return -a;
+        end
+    else
+        return b;
+    end
+end
+
+
+
+
+
+#
+# trying to break stuff
+#
+
+i + 2 = x;
+
+
+# function without if-else ended
+function checkPositive(num:int) : str
+    if (num > 0)
+        return "positive";
+    else
+        return "negative";
+    # Missing 'end' for the if-statement
+end
+
+
+#function not ended
+function boo() : int
+    return a;
+
+# var declaration without type
+function badVar() : int
+    var x;
+    x = 10;
+    return x;
+end
+
+# invalid if statement
+function testExpr(a:int) : int
+    if (a > 10
+        return a;
+    end
+end
+
+# empty function block
+# do i need to prohibit this?
+function emptyBody() : int
+end
+
+# empty while block
+var i:int;
+i = 0;
+while (i < 10)
+end
+
+# invalid expression
+x = 5 + ;
+
+# return statement not ending with ;
+function noSemicolon() : int
+    return 5
+end
