@@ -11,31 +11,31 @@ bool baseType();
 
 bool def_var();
 
-bool func_param();
+bool factor();
 
-bool func_params();
+bool expr_prefix();
+
+bool expr_mul();
+
+bool expr_add();
+
+bool expr_comp();
+
+bool expr_assign();
+
+bool expr_logic();
+
+bool expr();
+
+bool instr();
 
 bool block();
 
 bool def_func();
 
-bool instr();
+bool func_param();
 
-bool expr();
-
-bool expr_logic();
-
-bool expr_assign();
-
-bool expr_comp();
-
-bool expr_add();
-
-bool expr_mul();
-
-bool expr_prefix();
-
-bool factor();
+bool func_params();
 
 bool program();
 
