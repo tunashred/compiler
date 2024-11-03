@@ -34,15 +34,16 @@ bool def_var() {
     int start = iTk;
     if (consume(VAR)) {
         if (!consume(ID)) {
-            err("Variable declaration must contain an identifier, at line %d", tokens[iTk].code);
+            err("Variable declaration must contain an identifier, at line %d", tokens[iTk].line);
         }
         if (!consume(COLON)) {
-            err("Variable definition must contain ':' after identifier, at line %d", tokens[iTk].code);
+            err("Variable definition must contain ':' after identifier, at line %d", tokens[iTk].line);
         }
         if (baseType()) {
             if (consume(SEMICOLON)) {
                 return true;
             }
+            err("Unknown variable type, at line %d", tokens[iTk].line);
         }
     }
     iTk = start;
@@ -257,6 +258,7 @@ bool func_params() {
     return true;
 }
 
+// should I allow function prototypes?
 bool def_func() {
     int start = iTk;
     if (consume(FUNCTION) && consume(ID) && consume(LPAR)) {
