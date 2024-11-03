@@ -6,3 +6,51 @@ moo(3 + foo(3 * 2));
 hoo(3 * 2);
 
 koo();
+
+
+# for expr_prefix()
+# -28 !32
+# 69.42
+# - max(x * 2, 12, moo(a))
+
+# for expr_mul()
+69.42 * min(12, 43, 655)
+
+# for expr_add()
+-3 * root(12313 * 21 / 3) + 23
+
+# for expr_comp()
+483 + 12 < 69420 - 1337
+
+# for expr_assign()
+x = 2873
+x = 123 < 13
+x = 93 * 231 + 21 / 21
+
+# for expr_logic()
+z && a
+
+# for instr()
+x = 93 * 231 + 21 / 21 - fact(12 * 3);
+if(x == 12)
+    return x;
+else
+    return y;
+end
+
+while(x >= 43)
+    this = "block";
+    if (x = 12)
+        return z;
+    end
+    x = 12; 213 == 435; x - moo(x * 12);
+end
+
+if (x == 69 && y == 1337)
+    print(nice);
+end
+
+if ( (x = moo (12)) < 2)
+    print(wow it works);
+end
+
