@@ -35,7 +35,6 @@ bool def_var() {
     int start = iTk;
     if (consume(VAR) && consume(ID) && consume(COLON)) {
         if (baseType()) {
-            consume(tokens[iTk].code);
             if (consume(SEMICOLON)) {
                 return true;
             }
@@ -65,8 +64,8 @@ bool factor() {
             if (!consume(RPAR)) {
                 err("Expression missing ')', at line %d", tokens[iTk].line);
             }
-            return true;
         }
+        return true;
     }
 
     iTk = start;
@@ -78,8 +77,9 @@ bool expr_prefix() {
     // maybe here it would pass the code of the operator which prefixes the potential literal val
     // and then factor() would handle its signedness
     if (consume(SUB) || consume(NOT)) { }
+    // wtf, this allows case SUB LITERAL_STR or NOT LITERAL_STR
     if (!factor()) {
-        err("Invalid prefix?, at line %d", tokens[iTk].line);
+        return false;
     }
     return true;
 }
@@ -94,8 +94,9 @@ bool expr_mul() {
                 err("Missing expression after operand '*' or '/', at line %d", tokens[iTk].line);
             }
         }
+        return true;
     }
-    return true;
+    return false;
 }
 
 bool expr_add() {
@@ -105,8 +106,9 @@ bool expr_add() {
                 err("Missing expression after operand '+' or '-', at line %d", tokens[iTk].line);
             }
         }
+        return true;
     }
-    return true;
+    return false;
 }
 
 bool expr_comp() {
@@ -116,19 +118,23 @@ bool expr_comp() {
                 err("Missing expression after comparation operand, at line %d", tokens[iTk].line);
             }
         }
+        return true;
     }
-    return true;
+    return false;
 }
 
 bool expr_assign() {
+    int start = iTk;
     if (consume(ID)) {
-        if (!consume(ASSIGN)) {
-            err("Invalid assign expression, at line %d", tokens[iTk].line);
+        if (consume(ASSIGN)) {
+            // do nothing I guess, it is optional
+            // might as well remove the if statements and keep the consume calls
+        } else {
+            iTk = start;
         }
     }
-    if (!expr_comp()) {
-        // not sure if I ever need this
-        err("Something wrong inside expr_assign(), at line %d", tokens[iTk].line);
+    if (expr_comp()) {
+        return true;
     }
     return false;
 }
@@ -140,8 +146,9 @@ bool expr_logic() {
                 err("Malformed expression logic, at line %d", tokens[iTk].line);
             }
         }
+        return true;
     }
-    return true;
+    return false;
 }
 
 bool expr() {
@@ -154,6 +161,7 @@ bool instr() {
     int start = iTk;
     // I think I would get an error if the *optional* expression is missing
     if (expr()) {
+        // do I need to move it out of the nest?
         if(!consume(SEMICOLON)) {
             err("Missing semicolon after expression, at line %d", tokens[iTk].line);
         }
@@ -174,12 +182,11 @@ bool instr() {
     }
 
     if (consume(RETURN)) {
-        if (block()) {
-            if (consume(SEMICOLON)) {
-                return true;
-            }
+        expr();
+        if (!consume(SEMICOLON)) {
+            err("Malformed return statement, at line %d", tokens[iTk].line);
         }
-        err("Malformed return statement, at line %d", tokens[iTk].line);
+        return true;
     }
 
     if (consume(WHILE)) {
@@ -193,7 +200,8 @@ bool instr() {
             err("Missing right paranthesis at \"while\" statement, at line %d", tokens[iTk].line);
         }
         if (!block()) {
-            err("\"while\" statement missing block, at line %d", tokens[iTk].line);
+            // maybe at some point, I want to allow this
+            err("\"while\" statement body is empty, at line %d", tokens[iTk].line);
         }
         if (!consume(END)) {
 
@@ -207,17 +215,17 @@ bool instr() {
 
 bool block() {
     bool has_instr = false;
-    while ( (has_instr = instr()) ) { }
+    while (instr()) {
+        has_instr = true;
+    }
     return has_instr;
 }
 
 bool func_param() {
-    if (consume(ID) && consume(COLON)) {
-        if (baseType()) {
-            return true;
-        }
-        err("Missing variable type at declaration, at line %d", tokens[iTk].line);
+    if (consume(ID) && consume(COLON) && baseType()) {
+        return true;
     }
+    err("Missing variable type at declaration, at line %d", tokens[iTk].line);
     return false;
 }
 
@@ -236,7 +244,7 @@ bool def_func() {
     int start = iTk;
     if (consume(FUNCTION) && consume(ID) && consume(LPAR)) {
         if (tokens[iTk].code != RPAR) {
-            func_param();
+            func_params();
         }
         if (consume(RPAR) && consume(COLON) && baseType()) {
             while(def_var()) {}
