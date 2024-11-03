@@ -9,7 +9,6 @@
 int    iTk;
 Token* consumed;
 
-// considering to change param to Token*
 bool consume(int code) {
     if (tokens[iTk].code == code) {
         consumed = &tokens[iTk++];
@@ -33,7 +32,13 @@ bool baseType() {
 
 bool def_var() {
     int start = iTk;
-    if (consume(VAR) && consume(ID) && consume(COLON)) {
+    if (consume(VAR)) {
+        if (!consume(ID)) {
+            err("Variable declaration must contain an identifier, at line %d", tokens[iTk].code);
+        }
+        if (!consume(COLON)) {
+            err("Variable definition must contain ':' after identifier, at line %d", tokens[iTk].code);
+        }
         if (baseType()) {
             if (consume(SEMICOLON)) {
                 return true;
@@ -168,7 +173,19 @@ bool instr() {
         return true;
     }
 
-    if (consume(IF) && consume(LPAR) && expr() && consume(RPAR) && block()) {
+    if (consume(IF)) {
+        if (!consume(LPAR)) {
+            err("If statement start with '(', at line %d", tokens[iTk].line);
+        }
+        if (!expr()) {
+            err("If statement is not provided an expression, at line %d", tokens[iTk].line);
+        }
+        if (!consume(RPAR)) {
+            err("If statement must end with ')', at line %d", tokens[iTk].line);
+        }
+
+        block();
+
         if (consume(ELSE)) {
             if (!block()) {
                 err("Else statement missing block, at line %d", tokens[iTk].line);
@@ -184,7 +201,7 @@ bool instr() {
     if (consume(RETURN)) {
         expr();
         if (!consume(SEMICOLON)) {
-            err("Malformed return statement, at line %d", tokens[iTk].line);
+            err("Return statement missing ';', at line %d", tokens[iTk].line);
         }
         return true;
     }
@@ -251,7 +268,7 @@ bool def_func() {
             // will see later how to call block() here
             block();
             
-            // how should i detect if the function is terminated?
+            // TODO: how should i detect if the function is terminated?
             if (consume(END)) {
                 return true;
             }
