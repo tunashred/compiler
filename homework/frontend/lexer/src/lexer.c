@@ -26,7 +26,7 @@ Token* addTk(int code) {
 }
 
 char* copy_slice(char* dst, const char* begin, const char* end) {
-    size_t len = end - begin;
+    size_t len = (size_t) (end - begin);
     if (len > MAX_STR) {
         err("String is too long, at line: %d", line);
     }
@@ -44,7 +44,7 @@ int scan_int(const char* start) {
     while (isdigit(*current)) { // if end char is alpha, then should it err?
         current++;
     }
-    return current - start;
+    return (int) (current - start);
 }
 
 int scan_real(const char* start) {
@@ -74,7 +74,7 @@ int scan_real(const char* start) {
         err("Malformed floating point number, at line: %d", line);
     }
 
-    return current - start;
+    return (int) (current - start);
 }
 
 int scan_str(const char* start) {
@@ -95,7 +95,7 @@ int scan_str(const char* start) {
             current++;
         }
     }
-    return current - start;
+    return (int) (current - start);
 }
 
 // maybe this can become universal.. for string and future types

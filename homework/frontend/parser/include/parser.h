@@ -3,8 +3,6 @@
 
 #include <stdbool.h>
 
-#include "lexer.h"
-
 bool consume(int code);
 
 bool baseType();
