@@ -1,7 +1,5 @@
 #include <stdarg.h>
 #include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 #include "lexer.h"
 #include "utils.h"
@@ -168,7 +166,12 @@ bool instr() {
     // I think I would get an error if the *optional* expression is missing
     if (expr()) {
         // do I need to move it out of the nest?
-        if(!consume(SEMICOLON)) {
+        if (!consume(SEMICOLON)) {
+            // this would be bad for char arrays
+            // but this will depend on the way of implementing these
+            if (tokens[iTk].code == ASSIGN) {
+                err("Invalid assignment logic, at line %d", tokens[iTk].line);
+            }
             err("Missing semicolon after expression, at line %d", tokens[iTk].line);
         }
         return true;
