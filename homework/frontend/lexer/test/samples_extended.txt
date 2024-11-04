@@ -142,3 +142,11 @@ x = 5 + ;
 function noSemicolon() : int
     return 5
 end
+
+# bad declarations
+var 123abc:int;  # Invalid identifier
+var a:int; var a:int;  # Duplicate variable declaration
+var d:unknownType;  # Invalid type
+
+function add(a:int, b:int: int);  # Missing comma
+function add(a:int)  # Missing return type
