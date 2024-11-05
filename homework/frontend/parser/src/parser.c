@@ -5,6 +5,10 @@
 #include "utils.h"
 
 int    iTk;
+// for better error information and handling
+// it would be useful to memorise the last consumed *big* token
+// that means: ID, FUNCTION, IF, WHILE
+// example: print(aaa ssss) OR function inside function?
 Token* consumed;
 
 bool consume(int code) {
@@ -68,6 +72,8 @@ bool factor() {
             if (!consume(RPAR)) {
                 err("Expression missing ')', at line %d", tokens[iTk].line);
             }
+        } else if (tokens[iTk].code == ID) {
+            err("Ambiguous listing of identifiers, at line %d", tokens[iTk].line);
         }
         return true;
     }
@@ -130,6 +136,7 @@ bool expr_comp() {
 bool expr_assign() {
     int start = iTk;
     if (consume(ID)) {
+        // TODO: refactor here to if(!consume)
         if (consume(ASSIGN)) {
             // do nothing I guess, it is optional
             // might as well remove the if statements and keep the consume calls
@@ -264,19 +271,34 @@ bool func_params() {
 // should I allow function prototypes?
 bool def_func() {
     int start = iTk;
-    if (consume(FUNCTION) && consume(ID) && consume(LPAR)) {
+    if (consume(FUNCTION)) {
+        if (!consume(ID)) {
+            err("Function missing identifier, at line %d", tokens[iTk].line);
+        }
+        if (!consume(LPAR)) {
+            err("Function declaration missing '(', at line %d", tokens[iTk].line);
+        }
         if (tokens[iTk].code != RPAR) {
             func_params();
         }
-        if (consume(RPAR) && consume(COLON) && baseType()) {
-            while(def_var()) {}
-            // will see later how to call block() here
-            block();
-            
-            // TODO: how should i detect if the function is terminated?
-            if (consume(END)) {
-                return true;
-            }
+
+        if (!consume(RPAR) && consume(COLON) && baseType()) {
+            err("Function declaration missing ')', at line %d", tokens[iTk].line);    
+        }
+        if (!consume(COLON)) {
+            err("Function return type must be preceded by ':', at line %d", tokens[iTk].line);
+        }
+        if (!baseType()) {
+            err("Unknown function return type, at line %d", tokens[iTk].line);
+        }
+        
+        while(def_var()) {}
+        // will see later how to call block() here
+        block();
+        
+        // TODO: how should i detect if the function is terminated?
+        if (consume(END)) {
+            return true;
         }
     }
 
