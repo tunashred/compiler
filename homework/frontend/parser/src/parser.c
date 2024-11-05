@@ -8,7 +8,7 @@ int    iTk;
 // for better error information and handling
 // it would be useful to memorise the last consumed *big* token
 // that means: ID, FUNCTION, IF, WHILE
-// example: print(aaa ssss) OR function inside function?
+// example: function inside function?
 Token* consumed;
 
 bool consume(int code) {
@@ -136,11 +136,7 @@ bool expr_comp() {
 bool expr_assign() {
     int start = iTk;
     if (consume(ID)) {
-        // TODO: refactor here to if(!consume)
-        if (consume(ASSIGN)) {
-            // do nothing I guess, it is optional
-            // might as well remove the if statements and keep the consume calls
-        } else {
+        if (!consume(ASSIGN)) {
             iTk = start;
         }
     }
