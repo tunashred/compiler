@@ -198,11 +198,12 @@ bool instr() {
                 err("Else statement missing block, at line %d", tokens[iTk].line);
             }
         }
-        if (!consume(END)) {
-            // questionable about throwing error from here
-            // mainly because I dont know how to detect not terminated if statements
+        if (consume(END)) {
+            return true;
+        } else {
+            // unsafe?
+            err("If statement missing 'end' scope terminator, at line %d", tokens[iTk].line);
         }
-        return true;
     }
 
     if (consume(RETURN)) {
@@ -228,9 +229,11 @@ bool instr() {
             err("\"while\" statement body is empty, at line %d", tokens[iTk].line);
         }
         if (!consume(END)) {
-
+            return true;
+        } else {
+            // unsafe?
+            err("While loop missing 'end' scope terminator, at line %d", tokens[iTk].line);
         }
-        return true;
     }
 
     iTk = start;
@@ -289,12 +292,14 @@ bool def_func() {
         }
         
         while(def_var()) {}
-        // will see later how to call block() here
         block();
         
-        // TODO: how should i detect if the function is terminated?
         if (consume(END)) {
             return true;
+        } else {
+            // not sure it's the correct case to throw error here.. unsafe?
+            // also, the line is not accurate..
+            err("Function missing 'end' scope terminator, at line %d", tokens[iTk].line);
         }
     }
 
