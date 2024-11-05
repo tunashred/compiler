@@ -50,9 +50,7 @@ if (x == 69 && y == 1337)
     print(nice);
 end
 
-if ( (x = moo (12)) < 2)
-    print(wow it works);
-end
+
 
 var result:int;
 result = (3 + 5) * (10 / 2) - 7;
@@ -150,3 +148,15 @@ var d:unknownType;  # Invalid type
 
 function add(a:int, b:int: int);  # Missing comma
 function add(a:int)  # Missing return type
+
+# ambiguous stuff
+if (a > b)
+    if (c < d)
+        return e;
+    else
+    return f;
+
+# bad argument listing
+if ( (x = moo (12)) < 2)
+    print(wow it works);
+end
