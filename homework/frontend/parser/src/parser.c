@@ -36,17 +36,18 @@ bool def_var() {
     int start = iTk;
     if (consume(VAR)) {
         if (!consume(ID)) {
-            err("Variable declaration must contain an identifier, at line %d", tokens[iTk].line);
+            err("Variable declaration missing identifier, at line %d", tokens[iTk].line);
         }
         if (!consume(COLON)) {
-            err("Variable definition must contain ':' after identifier, at line %d", tokens[iTk].line);
+            err("Variable declaration must contain ':' after identifier, at line %d", tokens[iTk].line);
         }
         if (baseType()) {
             if (consume(SEMICOLON)) {
                 return true;
             }
-            err("Unknown variable type, at line %d", tokens[iTk].line);
+            err("Missing semicolon, at line %d", tokens[iTk].line);
         }
+        err("Unknown variable type, at line %d", tokens[iTk].line);
     }
     iTk = start;
     return false;
@@ -97,11 +98,12 @@ bool expr_prefix() {
 bool expr_mul() {
     if (expr_prefix()) {
         while (consume(MUL) || consume(DIV)) {
+            int last_code = tokens[iTk - 1].code;
             if (!expr_prefix()) {
-                // it would be nice to have more explicit error, like:
-                // Missing expression after operand '/' or '*'
-                // Missing expression at division/multiplication
-                err("Missing expression after operand '*' or '/', at line %d", tokens[iTk].line);
+                if (last_code == MUL) {
+                    err("Missing expression after operand '*', at line %d", tokens[iTk].line);
+                }
+                err("Missing expression after operand '/', at line %d", tokens[iTk].line);
             }
         }
         return true;
@@ -112,8 +114,12 @@ bool expr_mul() {
 bool expr_add() {
     if (expr_mul()) {
         while (consume(ADD) || consume(SUB)) {
+            int last_code = tokens[iTk - 1].code;
             if (!expr_mul()) {
-                err("Missing expression after operand '+' or '-', at line %d", tokens[iTk].line);
+                if (last_code == ADD) {
+                    err("Missing expression after operand '+', at line %d", tokens[iTk].line);
+                }
+                err("Missing expression after operand '-', at line %d", tokens[iTk].line);
             }
         }
         return true;
@@ -123,6 +129,7 @@ bool expr_add() {
 
 bool expr_comp() {
     if (expr_add()) {
+        // TODO: need to revise operator precedence table
         while (consume(EQUAL) || consume(NOT_EQ) || consume(LESS) || consume(GREATER) || consume(GREATER_EQ)) {
             if (!expr_add()) {
                 err("Missing expression after comparation operand, at line %d", tokens[iTk].line);
@@ -166,7 +173,6 @@ bool block();
 
 bool instr() {
     int start = iTk;
-    // I think I would get an error if the *optional* expression is missing
     if (expr()) {
         // do I need to move it out of the nest?
         if (!consume(SEMICOLON)) {
@@ -198,12 +204,11 @@ bool instr() {
                 err("Else statement missing block, at line %d", tokens[iTk].line);
             }
         }
-        if (consume(END)) {
-            return true;
-        } else {
+        if (!consume(END)) {
             // unsafe?
             err("If statement missing 'end' scope terminator, at line %d", tokens[iTk].line);
         }
+        return true;
     }
 
     if (consume(RETURN)) {
@@ -307,8 +312,6 @@ bool def_func() {
     return false;
 }
 
-// program ::= ( defVar | defFunc | block )* FINISH
-// commenting stuff which is not implemented yet
 bool program() {
     def_func();
     for (;;) {
@@ -321,7 +324,7 @@ bool program() {
     if (consume(FINISH)) {
         return true;
     } else
-        err("syntax error");
+        err("Syntax error at line, %d", tokens[iTk].line);
     return false;
 }
 
