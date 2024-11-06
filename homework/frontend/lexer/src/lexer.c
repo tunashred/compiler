@@ -41,8 +41,12 @@ int scan_int(const char* start) {
     if (isdigit(current[1])) {
         current++;
     }
-    while (isdigit(*current)) { // if end char is alpha, then should it err?
+    while (isdigit(*current)) {
         current++;
+    }
+    // needs further testing.. discovered I need this for case "123abc = 12;"
+    if (isalpha(*current)) {
+        err("Invalid identifier, at line %d", line);
     }
     return (int) (current - start);
 }
@@ -68,6 +72,9 @@ int scan_real(const char* start) {
     while (isdigit(*current)) {
         current++;
         has_digits_after_dot = true;
+    }
+    if (isalpha(*current)) {
+        err("Invalid identifier, at line %d", line);
     }
 
     if (!has_digits_before_dot || !has_digits_after_dot) {
@@ -98,7 +105,6 @@ int scan_str(const char* start) {
     return (int) (current - start);
 }
 
-// maybe this can become universal.. for string and future types
 Token* add_literal_tk(const char* start, int len, int tk_code) {
     if (!start || len <= 0) {
         err("Bad arguments when trying to add token, at line: %d\n", line);
