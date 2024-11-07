@@ -7,10 +7,10 @@
 /*  Ideas for improving error reporting
     1. The parser shouldn't stop at the first error occurence
     2. Instead of "syntax error" print at end of if-elseif, I could bring some improvements:
-        - check the current token (maybe it's neighbors too) and try to squeeze more information 
+        - check the current token (maybe it's neighbors too) and try to squeeze more information
 */
 
-int    iTk;
+int iTk;
 // for better error information and handling
 // it would be useful to memorise the last consumed *big* token
 // that means: ID, FUNCTION, IF, WHILE
@@ -32,7 +32,7 @@ bool baseType() {
         case TYPE_STR:
             consume(tokens[iTk].code);
             return true;
-        
+
         default:
             err("Invalid variable type, at line %d", tokens[iTk].line);
     }
@@ -95,7 +95,7 @@ bool factor() {
 bool expr_prefix() {
     // maybe here it would pass the code of the operator which prefixes the potential literal val
     // and then factor() would handle its signedness
-    if (consume(SUB) || consume(NOT)) { }
+    if (consume(SUB) || consume(NOT)) {}
     // wtf, this allows case SUB LITERAL_STR or NOT LITERAL_STR
     if (!factor()) {
         return false;
@@ -173,9 +173,7 @@ bool expr_logic() {
     return false;
 }
 
-bool expr() {
-    return expr_logic();
-}
+bool expr() { return expr_logic(); }
 
 bool block();
 
@@ -295,7 +293,7 @@ bool def_func() {
         }
 
         if (!consume(RPAR) && consume(COLON) && baseType()) {
-            err("Function declaration missing ')', at line %d", tokens[iTk].line);    
+            err("Function declaration missing ')', at line %d", tokens[iTk].line);
         }
         if (!consume(COLON)) {
             err("Function return type must be preceded by ':', at line %d", tokens[iTk].line);
@@ -303,10 +301,10 @@ bool def_func() {
         if (!baseType()) {
             err("Unknown function return type, at line %d", tokens[iTk].line);
         }
-        
-        while(def_var()) {}
+
+        while (def_var()) {}
         block();
-        
+
         if (consume(END)) {
             return true;
         } else {

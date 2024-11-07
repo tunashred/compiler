@@ -26,7 +26,7 @@ Token* addTk(int code) {
 }
 
 char* copy_slice(char* dst, const char* begin, const char* end) {
-    size_t len = (size_t) (end - begin);
+    size_t len = (size_t)(end - begin);
     if (len > MAX_STR) {
         err("String is too long, at line: %d", line);
     }
@@ -48,7 +48,7 @@ int scan_int(const char* start) {
     if (isalpha(*current)) {
         err("Invalid identifier, at line %d", line);
     }
-    return (int) (current - start);
+    return (int)(current - start);
 }
 
 int scan_real(const char* start) {
@@ -81,7 +81,7 @@ int scan_real(const char* start) {
         err("Malformed floating point number, at line: %d", line);
     }
 
-    return (int) (current - start);
+    return (int)(current - start);
 }
 
 int scan_str(const char* start) {
@@ -102,7 +102,7 @@ int scan_str(const char* start) {
             current++;
         }
     }
-    return (int) (current - start);
+    return (int)(current - start);
 }
 
 Token* add_literal_tk(const char* start, int len, int tk_code) {
