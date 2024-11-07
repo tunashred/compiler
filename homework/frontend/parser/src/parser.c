@@ -4,6 +4,12 @@
 #include "lexer.h"
 #include "utils.h"
 
+/*  Ideas for improving error reporting
+    1. The parser shouldn't stop at the first error occurence
+    2. Instead of "syntax error" print at end of if-elseif, I could bring some improvements:
+        - check the current token (maybe it's neighbors too) and try to squeeze more information 
+*/
+
 int    iTk;
 // for better error information and handling
 // it would be useful to memorise the last consumed *big* token
@@ -44,6 +50,8 @@ bool def_var() {
         if (baseType()) {
             if (consume(SEMICOLON)) {
                 return true;
+            } else if (tokens[iTk].code == ASSIGN) {
+                err("Variable initialization is forbidden, at line %d", tokens[iTk].line);
             }
             err("Missing semicolon, at line %d", tokens[iTk].line);
         }
