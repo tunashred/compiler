@@ -161,15 +161,13 @@ if ( (x = moo (12)) < 2)
     print(wow it works);
 end
 
+# initialization is forbidden
+var a:int = c * foo(12);
 
-
-
-
+# bad declaration
+int a = 32;
 
 
 #
 ### to be tested and fixed cases
 #
-var a:int = c * foo(12);
-
-int a = 32;
