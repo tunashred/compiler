@@ -240,11 +240,10 @@ bool instr() {
             err("\"while\" statement body is empty, at line %d", tokens[iTk].line);
         }
         if (!consume(END)) {
-            return true;
-        } else {
             // unsafe?
             err("While loop missing 'end' scope terminator, at line %d", tokens[iTk].line);
         }
+        return true;
     }
 
     iTk = start;
