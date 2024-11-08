@@ -206,7 +206,18 @@ const char* convertTokenCode(Token* tk, int mode) { // TODO: there's gotta be a 
 void printTokens() {
     for (int i = 0; i < numTokens; i++) {
         Token* tk = &tokens[i];
-        printf("Line: %4d, code: %2d %8s\n", tk->line, tk->code, convertTokenCode(tk, NAME));
+        printf("%4d ", tk->line);
+        if (tk->code == ID) {
+            printf("ID:%s\n", tk->text);
+        } else if (tk->code == LITERAL_INT) {
+            printf("INT:%d\n", tk->i);
+        } else if (tk->code == LITERAL_REAL) {
+            printf("REAL:%f\n", tk->r);
+        } else if (tk->code == LITERAL_STR) {
+            printf("STR:%s\n", tk->text);
+        } else {
+            printf("%s\n", convertTokenCode(tk, NAME));
+        }
     }
 }
 
