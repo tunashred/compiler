@@ -3,10 +3,13 @@ file(GLOB_RECURSE PARSER_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 file(GLOB_RECURSE PARSER_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
 # Add the include directories for this module
-target_include_directories(parser_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Create a library from the sources in this directory
 add_library(parser_lib ${PARSER_SOURCES})
 
-# Link common_flags to parser_lib and also link lexer_lib
+# Ensure the main executable and other targets include parser headers
+target_include_directories(parser_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Link common_flags to parser_lib
 target_link_libraries(parser_lib PUBLIC common_flags lexer_lib)
