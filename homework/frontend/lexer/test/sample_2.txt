@@ -1,15 +1,10 @@
-function max(x:int, z:str) : int
-    var x:int;
-    # sdadfs fdsf dsfsd dfgggfd var a + sa;     
-end
 
 # function without args
 function emptyFunc() : int
     var x:int;
-    x = 10;
+    x = 121.21;
     return x;
 end
-
 
 k = -2.0;
 #good food bruh k < "a";
@@ -19,8 +14,21 @@ var i:int;
 
 i=0;    # iterator
 i = x + 2;
+
 if (i > 5.2)
     return z;
+end
+
+function complexLogic(a:int, b:int) : int
+    if (a > b)
+        if (b > 0)
+            return a;
+        else
+            return -a;
+        end
+    else
+        return b;
+    end
 end
 
 function add(a:int, b:int) : int

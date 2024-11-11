@@ -5,9 +5,9 @@
 #include "utils.h"
 
 int main() {
-    char* buffer = loadFile("../lexer/test/sample_2.txt");
+    char* buffer = loadFile("../lexer/test/sample_1.txt");
     tokenize(buffer);
-    printDebugTokens();
+    printTokens();
     parse();
 
     free(buffer);
