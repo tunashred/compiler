@@ -3,6 +3,14 @@ Sounds pretty cool, right? The syntax may suffer changes overtime, but this is n
 
 The important thing is that I'm doing it.
 
+## Important features/goals
+This programming language plans to be very strict. Stuff which I consider mandatory for my language is:
+- type checking
+- avoiding the concept of undefined behavior
+- error handling (throw-catch)
+- compile-time checks
+- 
+
 ## How would it look like?
 I will just provide a snippet with _all_ the stuff that it would contain.
 
