@@ -1,13 +1,12 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-# Set C and C++ standards
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Project name and version
-project(college-compiler VERSION 0.1.0 LANGUAGES C CXX)
+project(my_compiler VERSION 0.1.0 LANGUAGES C CXX)
 
 # Include directories for the entire project
 include_directories(${CMAKE_SOURCE_DIR})
@@ -30,7 +29,6 @@ endfunction()
 # Collect sources from the root directory
 collect_sources_and_includes(${CMAKE_SOURCE_DIR})
 
-# Include the lexer and parser subdirectories
 add_subdirectory(frontend)
 
 # Set main file path
@@ -40,7 +38,7 @@ set(MAIN_FILE_PATH "${CMAKE_SOURCE_DIR}/main.c")
 list(REMOVE_ITEM ROOT_SOURCES "${MAIN_FILE_PATH}")
 
 # Set executable name
-set(EXECUTABLE "college-compiler")
+set(EXECUTABLE "my_compiler")
 
 # Add executable target with the collected source files
 add_executable(${EXECUTABLE} ${ROOT_SOURCES} ${MAIN_FILE_PATH})
@@ -72,10 +70,8 @@ target_compile_options(common_flags INTERFACE
     "$<$<CONFIG:Debug>:-g;-O0;-fverbose-asm;-finstrument-functions;-fno-inline>"
 )
 
-# Link common_flags to lexer_lib, parser_lib, and the main executable
 target_link_libraries(${EXECUTABLE} PRIVATE common_flags lexer_lib parser_lib)
 
-# Include lexer and parser directories for the main executable
 target_include_directories(${EXECUTABLE} PRIVATE
     ${CMAKE_SOURCE_DIR}/lexer/include
     ${CMAKE_SOURCE_DIR}/parser/include

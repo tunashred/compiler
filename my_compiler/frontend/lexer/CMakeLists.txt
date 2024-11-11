@@ -8,7 +8,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 # Create a library from the sources in this directory
 add_library(lexer_lib ${PARSER_SOURCES})
 
-# Ensure the main executable and other targets include parser headers
 target_include_directories(lexer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Link common_flags to parser_lib
