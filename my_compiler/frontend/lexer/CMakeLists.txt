@@ -8,7 +8,7 @@ add_library(lexer_lib ${LEXER_SOURCES})
 # Include the headers for this module
 target_include_directories(lexer_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include  # lexer-specific includes
-    ${CMAKE_SOURCE_DIR}/frontend/utils/include  # global utils include
+    ${CMAKE_SOURCE_DIR}  # explicitly include utils path
 )
 
 # Link common_flags and utils_lib to lexer_lib

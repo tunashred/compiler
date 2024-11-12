@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../utils/include/utils.h"
+#include "frontend/utils/include/utils.h"
 #include "lexer.h"
 
 Token tokens[MAX_TOKENS];

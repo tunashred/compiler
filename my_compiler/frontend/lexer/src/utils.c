@@ -1,12 +1,10 @@
 #include <stdarg.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "utils.h"
 #include "lexer.h"
 
-const char* convertTokenCode(Token* tk, int mode) { // TODO: there's gotta be a better way
+const char* convertTokenCode(Token* tk, int mode) {
     static char buffer[MAX_STR + 1];
     switch (tk->code) {
         case ID:

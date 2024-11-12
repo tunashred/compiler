@@ -1,7 +1,6 @@
 #include <stdlib.h>
 
 #include "frontend/lexer/include/lexer.h"
-// #include "parser.h"
 #include "frontend/lexer/include/utils.h"
 #include "frontend/utils/include/utils.h"
 
