@@ -81,3 +81,16 @@ At the moment, macros would need to be wrapped around `[ ]`.
 #### 5\. Switch case would be nice to work with strings and data structures too.
 
 
+## Minimal features
+First, I will just do the minimum features I want in my language. After I am done with all the components of the compiler working with my little programming language, I will add more stuff.
+
+### Features:
+- Variable types: `int`, `long`, `float`, `charray`
+- Loops: `while`
+- Conditionals: `if`, `elif`, `else`
+- Operators:
+    * Bitwise: `XOR`, `AND`, `OR`
+    * Logical: `NOT`, `AND`, `OR`
+    * Other: `ADD`, `SUBTRACT`, `MULTIPLY`, `DIVIDE`, `INCREMENT`, `DECREMENT`
+- Single-line comments and multi-line comments
+- 
