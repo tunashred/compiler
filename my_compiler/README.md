@@ -33,12 +33,12 @@ fun void moo(int a, int b) {
     int i = 0;
 
     int array_a[10] {0, 1, 2}; // way to initialize?
-    int array_b[68] = [0 - 68] {69}; // initialize the 0-68 range of elements to value 69
+    int array_b[68] = [0 - 30] {69} : [31 - 67] {96}; // initialize the 0-68 range of elements to value 69
 
     if (a < b && b^2 == 64 || x * a == b) {
         while i < 10 {
             array_a[i] = a;
-            i++;
+            ++i; // yes, all ways to increment and decrement
         }
         return; // we can do this in void functions
     }
@@ -77,3 +77,7 @@ At the moment, macros would need to be wrapped around `[ ]`.
 #### 3\. I think for the moment, the only available type of loop is `while`. (if I got enough time, I would try to implement `foreach` loop)
 
 #### 4\. Would be nice to be able to use increment operator with array indexing (`array[i++]`).
+
+#### 5\. Switch case would be nice to work with strings and data structures too.
+
+
