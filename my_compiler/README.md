@@ -89,6 +89,7 @@ First, I will just do the minimum features I want in my language. After I am don
 - Operators:
     * Bitwise: `XOR`, `AND`, `OR`
     * Logical: `NOT`, `AND`, `OR`
+    * Relational: `EQUALS`, `NOT_EQ`, `LESS`, `LESS_EQ`, `GREATER`, `GREATER_EQ`
     * Other: `ADD`, `SUBTRACT`, `MULTIPLY`, `DIVIDE`, `INCREMENT`, `DECREMENT`
 - Single-line comments and multi-line comments
 - 
