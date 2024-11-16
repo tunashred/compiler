@@ -15,7 +15,7 @@ Token* addTk(int code) {
     if (numTokens == MAX_TOKENS) {
         err("Reached maximum number of tokens: %d", MAX_TOKENS);
     }
-    if (code < ID || code >= COMMENT) {
+    if (code < ID || code > FINISH) {
         err("Invalid token code %d, at line %d", code, line);
     }
     Token* tk = &tokens[numTokens];
@@ -122,7 +122,7 @@ Token* add_literal_tk(const char* start, int len, int tk_code) {
             tk->i = atoi(temp_str);
             break;
 
-        case LITERAL_REAL:
+        case LITERAL_FLOAT:
             tk->r = atof(temp_str);
             break;
     }
@@ -170,11 +170,11 @@ void tokenize(const char* p_ch) {
                 p_ch++;
                 break;
             case '(':
-                addTk(LPAR);
+                addTk(L_ROUND_PAR);
                 p_ch++;
                 break;
             case ')':
-                addTk(RPAR);
+                addTk(R_ROUND_PAR);
                 p_ch++;
                 break;
 
@@ -252,13 +252,11 @@ void tokenize(const char* p_ch) {
                     char* text = copy_slice(buffer, start, p_ch);
                     if (!strcmp(text, "int")) {
                         addTk(TYPE_INT);
-                    } else if (!strcmp(text, "float")) { // do we want double or float?
-                        addTk(TYPE_REAL);
+                    } else if (!strcmp(text, "float")) {
+                        addTk(TYPE_FLOAT);
                     } else if (!strcmp(text, "str")) {
                         addTk(TYPE_STR);
-                    } else if (!strcmp(text, "var")) {
-                        addTk(VAR);
-                    } else if (!strcmp(text, "function")) {
+                    } else if (!strcmp(text, "fun")) {
                         addTk(FUNCTION);
                     } else if (!strcmp(text, "if")) {
                         addTk(IF);
@@ -266,8 +264,6 @@ void tokenize(const char* p_ch) {
                         addTk(ELSE);
                     } else if (!strcmp(text, "while")) {
                         addTk(WHILE);
-                    } else if (!strcmp(text, "end")) {
-                        addTk(END);
                     } else if (!strcmp(text, "return")) {
                         addTk(RETURN);
                     } else {
@@ -278,7 +274,7 @@ void tokenize(const char* p_ch) {
                 } else if (isdigit(*p_ch)) {
                     if ((len = scan_real(p_ch))) {
                         temp_str = copy_slice(buffer, p_ch, p_ch + len);
-                        tk       = addTk(LITERAL_REAL);
+                        tk       = addTk(LITERAL_FLOAT);
                         tk->r    = atof(temp_str);
                     } else if ((len = scan_int(p_ch))) {
                         temp_str = copy_slice(buffer, p_ch, p_ch + len);

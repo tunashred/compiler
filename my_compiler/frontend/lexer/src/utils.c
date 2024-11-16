@@ -31,17 +31,17 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "SEMICOLON";
 
-        case LPAR:
+        case L_ROUND_PAR:
             if (mode == SYMBOL) {
                 return "(";
             }
-            return "LPAR";
+            return "L_ROUND_PAR";
 
-        case RPAR:
+        case R_ROUND_PAR:
             if (mode == SYMBOL) {
                 return ")";
             }
-            return "RPAR";
+            return "R_ROUND_PAR";
 
         case ADD:
             if (mode == SYMBOL) {
@@ -110,12 +110,12 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "LITERAL_INT";
 
-        case LITERAL_REAL:
+        case LITERAL_FLOAT:
             if (mode == SYMBOL) {
                 snprintf(buffer, sizeof(buffer), "%f", tk->r);
                 return buffer;
             }
-            return "LITERAL_REAL";
+            return "LITERAL_FLOAT";
 
         case LITERAL_STR:
             if (mode == SYMBOL) {
@@ -123,8 +123,6 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "LITERAL_STR";
 
-        case VAR:
-            return "VAR";
         case FUNCTION:
             return "FUNCTION";
         case IF:
@@ -133,14 +131,12 @@ const char* convertTokenCode(Token* tk, int mode) {
             return "ELSE";
         case WHILE:
             return "WHILE";
-        case END:
-            return "END";
         case RETURN:
             return "RETURN";
         case TYPE_INT:
             return "TYPE_INT";
-        case TYPE_REAL:
-            return "TYPE_REAL";
+        case TYPE_FLOAT:
+            return "TYPE_FLOAT";
         case TYPE_STR:
             return "TYPE_STR";
         case FINISH:
@@ -153,8 +149,8 @@ const char* convertTokenCode(Token* tk, int mode) {
             return "NOT";
         case SPACE:
             return "SPACE";
-        case COMMENT:
-            return "COMMENT";
+        case SINGLE_LINE_COMMENT:
+            return "SINGLE_LINE_COMMENT";
         default:
             return "UNKNOWN";
     }
@@ -168,7 +164,7 @@ void printTokens() {
             printf("ID:%s\n", tk->text);
         } else if (tk->code == LITERAL_INT) {
             printf("INT:%d\n", tk->i);
-        } else if (tk->code == LITERAL_REAL) {
+        } else if (tk->code == LITERAL_FLOAT) {
             printf("REAL:%f\n", tk->r);
         } else if (tk->code == LITERAL_STR) {
             printf("STR:%s\n", tk->text);
