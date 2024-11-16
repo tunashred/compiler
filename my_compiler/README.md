@@ -28,7 +28,7 @@ I will just provide a snippet with _all_ the stuff that it would contain.
     }
 ]
 
-fun void moo(int a, int b) {
+fun moo(int a, int b) -> void {
     int x = 3, y, z = 1;
     int i = 0;
 
@@ -49,7 +49,7 @@ fun void moo(int a, int b) {
     }
 }
 
-void main() {
+fun main() -> void {
     int x = 12;
     moo -> 0, 12; // not sure if this is a nice way to call a function
     
