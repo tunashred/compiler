@@ -129,7 +129,7 @@ Token* add_literal_tk(const char* start, int len, int tk_code) {
     return tk;
 }
 
-void tokenize(const char* p_ch) {
+void tokenize(const char* p_ch, size_t buffer_size) {
     const char* start;
     const char* temp_str;
     int         len;
@@ -221,14 +221,18 @@ void tokenize(const char* p_ch) {
                 } else if (p_ch[1] == '*') {
                     start = p_ch++;
                     while (1) {
+                        if (p_ch[1] == '\0') {
+                            return;
+                        }
                         if (*p_ch == '*' && p_ch[1] == '/') {
                             break;
                         } else if (*p_ch == '/' && p_ch[1] == '*') {
                             err("Nested multi-line comments are not allowed, at line %d", line);
+                        } else if (*p_ch == '\n') {
+                            line++;
                         }
                         p_ch++;
                     }
-                    line++;
                     p_ch += 2;
                     break;
                 }
