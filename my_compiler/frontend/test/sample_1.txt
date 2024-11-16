@@ -1,10 +1,16 @@
+/* dsadas
+dsadsddfds ***sdar8392hngd//sadsa321
+sdadsa
+*/
+
 // this is a comment
+
 
 fun printy() -> void {
     print(6, 9);
 }
 
-gg = 5 ^ 1 | 43 ~ 12;
+gg = 5 ^ 1 | 43 ~ 12; /* asdadsa */
 
 fun moo(int a, int x) -> int {
     float x = 6.9;
