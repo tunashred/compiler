@@ -1,6 +1,8 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include <stdlib.h>
+
 #define MAX_TOKENS 4096
 extern int numTokens;
 #define MAX_STR 127
@@ -54,6 +56,6 @@ int scan_str(const char* start);
 
 Token* add_literal_tk(const char* start, int len, int tk_code);
 
-void tokenize(const char* p_ch);
+void tokenize(const char* p_ch, size_t buffer_size);
 
 #endif

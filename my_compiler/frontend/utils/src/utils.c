@@ -23,7 +23,7 @@ void* safeMalloc(size_t nBytes) {
     return p;
 }
 
-char* loadFile(const char* fileName) {
+char* loadFile(const char* fileName, size_t* ret_file_size) {
     FILE* file = fopen(fileName, "rb");
     if (!file) {
         err("Can't open file %s", fileName);
@@ -40,6 +40,7 @@ char* loadFile(const char* fileName) {
         err("Cannot read all the content of %s", fileName);
     }
     buf[file_size] = '\0';
+    *ret_file_size = file_size;
     return buf;
 }
 
