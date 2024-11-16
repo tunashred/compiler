@@ -218,6 +218,19 @@ void tokenize(const char* p_ch) {
                     line++;
                     p_ch++;
                     break;
+                } else if (p_ch[1] == '*') {
+                    start = p_ch++;
+                    while (1) {
+                        if (*p_ch == '*' && p_ch[1] == '/') {
+                            break;
+                        } else if (*p_ch == '/' && p_ch[1] == '*') {
+                            err("Nested multi-line comments are not allowed, at line %d", line);
+                        }
+                        p_ch++;
+                    }
+                    line++;
+                    p_ch += 2;
+                    break;
                 }
                 add_token(DIV);
                 p_ch++;
