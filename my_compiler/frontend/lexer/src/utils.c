@@ -43,6 +43,18 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "R_ROUND_PAR";
 
+        case L_BRACKET:
+            if (mode == SYMBOL) {
+                return "{";
+            }
+            return "L_BRACKET";
+
+        case R_BRACKET:
+            if (mode == SYMBOL) {
+                return "}";
+            }
+            return "R_BRACKET";
+
         case ADD:
             if (mode == SYMBOL) {
                 return "+";
@@ -67,6 +79,18 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "DIV";
 
+        case INC:
+            if (mode == SYMBOL) {
+                return "++";
+            }
+            return "INC";
+
+        case DEC:
+            if (mode == SYMBOL) {
+                return "--";
+            }
+            return "DEC";
+
         case ASSIGN:
             if (mode == SYMBOL) {
                 return "=";
@@ -90,6 +114,12 @@ const char* convertTokenCode(Token* tk, int mode) {
                 return "<";
             }
             return "LESS";
+
+        case LESS_EQ:
+            if (mode == SYMBOL) {
+                return "<=";
+            }
+            return "LESS_EQ";
 
         case GREATER:
             if (mode == SYMBOL) {

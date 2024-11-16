@@ -138,11 +138,6 @@ void tokenize(const char* p_ch) {
 
     for (;;) {
         switch (*p_ch) {
-            case '#':
-                for (start = p_ch++; *p_ch != '\n'; p_ch++) {}
-                line++;
-                p_ch++;
-                break;
             case ' ':
             case '\t':
                 p_ch++;
@@ -156,7 +151,9 @@ void tokenize(const char* p_ch) {
                 line++;
                 p_ch++;
                 break;
-
+            /*
+                DELIMITERS
+            */
             case ',':
                 addTk(COMMA);
                 p_ch++;
@@ -177,22 +174,48 @@ void tokenize(const char* p_ch) {
                 addTk(R_ROUND_PAR);
                 p_ch++;
                 break;
+            case '{':
+                addTk(L_BRACKET);
+                p_ch++;
+                break;
+            case '}':
+                addTk(R_BRACKET);
+                p_ch++;
+                break;
+
+            /*
+                OPERATORS
+            */
 
             case '+':
-                addTk(ADD);
-                p_ch++;
+                if (p_ch[1] == '+') {
+                    addTk(INC);
+                    p_ch += 2;
+                } else {
+                    addTk(ADD);
+                    p_ch++;
+                }
                 break;
-
             case '-':
-                addTk(SUB);
-                p_ch++;
+                if (p_ch[1] == '-') {
+                    addTk(DEC);
+                    p_ch += 2;
+                } else {
+                    addTk(SUB);
+                    p_ch++;
+                }
                 break;
-
             case '*':
                 addTk(MUL);
                 p_ch++;
                 break;
             case '/':
+                if (p_ch[1] == '/') {
+                    for (start = p_ch++; *p_ch != '\n'; p_ch++) {}
+                    line++;
+                    p_ch++;
+                    break;
+                }
                 addTk(DIV);
                 p_ch++;
                 break;
@@ -209,6 +232,8 @@ void tokenize(const char* p_ch) {
                 }
                 p_ch++;
                 break;
+            case '^':
+                addTk(XOR);
             case '!':
                 if (p_ch[1] == '=') {
                     addTk(NOT_EQ);
@@ -229,8 +254,13 @@ void tokenize(const char* p_ch) {
                 }
                 break;
             case '<':
-                addTk(LESS);
-                p_ch++;
+                if (p_ch[1] == '=') {
+                    addTk(LESS_EQ);
+                    p_ch += 2;
+                } else {
+                    addTk(LESS);
+                    p_ch++;
+                }
                 break;
             case '>':
                 if (p_ch[1] == '=') {
@@ -245,6 +275,10 @@ void tokenize(const char* p_ch) {
             case '\0':
                 addTk(FINISH);
                 return;
+
+            /*
+                IDENTIFIERS AND KEYWORDS
+            */
 
             default:
                 if ((isalpha(*p_ch) || *p_ch == '_')) {
@@ -270,6 +304,10 @@ void tokenize(const char* p_ch) {
                         tk = addTk(ID);
                         strcpy(tk->text, text);
                     }
+
+                /*
+                    LITERALS
+                */
 
                 } else if (isdigit(*p_ch)) {
                     if ((len = scan_real(p_ch))) {
