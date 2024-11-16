@@ -1,0 +1,19 @@
+// this is a comment
+
+fun printy() -> void {
+    print(6, 9);
+}
+
+gg = 5 ^ 1 | 43 ~ 12;
+
+fun moo(int a, int x) -> int {
+    float x = 6.9;
+    while (int i = 0) < 10 {
+        if (x <= 1 && b >= 1 || !a) {
+            print("woof");
+        } else {
+            return x;
+        }
+    }
+    return --a;
+}
