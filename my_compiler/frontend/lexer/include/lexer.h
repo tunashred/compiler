@@ -42,7 +42,7 @@ typedef enum {
 
 typedef enum { NAME, SYMBOL } token_print_mode;
 
-Token* addTk(int code);
+Token* add_token(int code);
 
 char* copy_slice(char* dst, const char* begin, const char* end);
 

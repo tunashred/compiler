@@ -11,7 +11,7 @@ int   numTokens;
 
 int line = 1;
 
-Token* addTk(int code) {
+Token* add_token(int code) {
     if (numTokens == MAX_TOKENS) {
         err("Reached maximum number of tokens: %d", MAX_TOKENS);
     }
@@ -115,7 +115,7 @@ Token* add_literal_tk(const char* start, int len, int tk_code) {
     char   buffer[MAX_STR + 1];
     char*  temp_str = copy_slice(buffer, start, start + len);
 
-    tk = addTk(tk_code);
+    tk = add_token(tk_code);
 
     switch (tk_code) {
         case LITERAL_INT:
@@ -155,31 +155,31 @@ void tokenize(const char* p_ch) {
                 DELIMITERS
             */
             case ',':
-                addTk(COMMA);
+                add_token(COMMA);
                 p_ch++;
                 break;
             case ':':
-                addTk(COLON);
+                add_token(COLON);
                 p_ch++;
                 break;
             case ';':
-                addTk(SEMICOLON);
+                add_token(SEMICOLON);
                 p_ch++;
                 break;
             case '(':
-                addTk(L_ROUND_PAR);
+                add_token(L_ROUND_PAR);
                 p_ch++;
                 break;
             case ')':
-                addTk(R_ROUND_PAR);
+                add_token(R_ROUND_PAR);
                 p_ch++;
                 break;
             case '{':
-                addTk(L_BRACKET);
+                add_token(L_BRACKET);
                 p_ch++;
                 break;
             case '}':
-                addTk(R_BRACKET);
+                add_token(R_BRACKET);
                 p_ch++;
                 break;
 
@@ -189,27 +189,27 @@ void tokenize(const char* p_ch) {
 
             case '+':
                 if (p_ch[1] == '+') {
-                    addTk(INC);
+                    add_token(INC);
                     p_ch += 2;
                 } else {
-                    addTk(ADD);
+                    add_token(ADD);
                     p_ch++;
                 }
                 break;
             case '-':
                 if (p_ch[1] == '-') {
-                    addTk(DEC);
+                    add_token(DEC);
                     p_ch += 2;
                 } else if (p_ch[1] == '>') {
-                    addTk(FUNC_RET_OP);
+                    add_token(FUNC_RET_OP);
                     p_ch += 2;
                 } else {
-                    addTk(SUB);
+                    add_token(SUB);
                     p_ch++;
                 }
                 break;
             case '*':
-                addTk(MUL);
+                add_token(MUL);
                 p_ch++;
                 break;
             case '/':
@@ -219,76 +219,76 @@ void tokenize(const char* p_ch) {
                     p_ch++;
                     break;
                 }
-                addTk(DIV);
+                add_token(DIV);
                 p_ch++;
                 break;
 
             case '~':
-                addTk(BITWISE_NOT);
+                add_token(BITWISE_NOT);
                 p_ch++;
                 break;
             case '^':
-                addTk(BITWISE_XOR);
+                add_token(BITWISE_XOR);
                 p_ch++;
                 break;
             case '&':
                 if (p_ch[1] == '&') {
-                    addTk(LOGICAL_AND);
+                    add_token(LOGICAL_AND);
                     p_ch += 2;
                 } else {
-                    addTk(BITWISE_AND);
+                    add_token(BITWISE_AND);
                     p_ch++;
                 }
                 break;
             case '|':
                 if (p_ch[1] == '|') {
-                    addTk(LOGICAL_OR);
+                    add_token(LOGICAL_OR);
                     p_ch += 2;
                 } else {
-                    addTk(BITWISE_OR);
+                    add_token(BITWISE_OR);
                     p_ch++;
                 }
                 break;
             case '!':
                 if (p_ch[1] == '=') {
-                    addTk(NOT_EQ);
+                    add_token(NOT_EQ);
                     p_ch += 2;
                 } else {
-                    addTk(LOGICAL_NOT);
+                    add_token(LOGICAL_NOT);
                     p_ch++;
                 }
                 break;
 
             case '=':
                 if (p_ch[1] == '=') {
-                    addTk(EQUAL);
+                    add_token(EQUAL);
                     p_ch += 2;
                 } else {
-                    addTk(ASSIGN);
+                    add_token(ASSIGN);
                     p_ch++;
                 }
                 break;
             case '<':
                 if (p_ch[1] == '=') {
-                    addTk(LESS_EQ);
+                    add_token(LESS_EQ);
                     p_ch += 2;
                 } else {
-                    addTk(LESS);
+                    add_token(LESS);
                     p_ch++;
                 }
                 break;
             case '>':
                 if (p_ch[1] == '=') {
-                    addTk(GREATER_EQ);
+                    add_token(GREATER_EQ);
                     p_ch += 2;
                 } else {
-                    addTk(GREATER);
+                    add_token(GREATER);
                     p_ch++;
                 }
                 break;
 
             case '\0':
-                addTk(FINISH);
+                add_token(FINISH);
                 return;
 
             /*
@@ -300,25 +300,25 @@ void tokenize(const char* p_ch) {
                     for (start = p_ch++; isalnum(*p_ch) || *p_ch == '_'; p_ch++) {}
                     char* text = copy_slice(buffer, start, p_ch);
                     if (!strcmp(text, "int")) {
-                        addTk(TYPE_INT);
+                        add_token(TYPE_INT);
                     } else if (!strcmp(text, "float")) {
-                        addTk(TYPE_FLOAT);
+                        add_token(TYPE_FLOAT);
                     } else if (!strcmp(text, "str")) {
-                        addTk(TYPE_STR);
+                        add_token(TYPE_STR);
                     } else if (!strcmp(text, "void")) {
-                        addTk(TYPE_VOID);
+                        add_token(TYPE_VOID);
                     } else if (!strcmp(text, "fun")) {
-                        addTk(FUNCTION);
+                        add_token(FUNCTION);
                     } else if (!strcmp(text, "if")) {
-                        addTk(IF);
+                        add_token(IF);
                     } else if (!strcmp(text, "else")) {
-                        addTk(ELSE);
+                        add_token(ELSE);
                     } else if (!strcmp(text, "while")) {
-                        addTk(WHILE);
+                        add_token(WHILE);
                     } else if (!strcmp(text, "return")) {
-                        addTk(RETURN);
+                        add_token(RETURN);
                     } else {
-                        tk = addTk(ID);
+                        tk = add_token(ID);
                         strcpy(tk->text, text);
                     }
 
@@ -329,11 +329,11 @@ void tokenize(const char* p_ch) {
                 } else if (isdigit(*p_ch)) {
                     if ((len = scan_real(p_ch))) {
                         temp_str = copy_slice(buffer, p_ch, p_ch + len);
-                        tk       = addTk(LITERAL_FLOAT);
+                        tk       = add_token(LITERAL_FLOAT);
                         tk->r    = atof(temp_str);
                     } else if ((len = scan_int(p_ch))) {
                         temp_str = copy_slice(buffer, p_ch, p_ch + len);
-                        tk       = addTk(LITERAL_INT);
+                        tk       = add_token(LITERAL_INT);
                         tk->i    = atoi(temp_str);
                     } else {
                         err("Invalid number literal, at line %d", line);
@@ -344,7 +344,7 @@ void tokenize(const char* p_ch) {
                     len = scan_str(p_ch);
                     p_ch++;
                     temp_str = copy_slice(buffer, p_ch, p_ch + len - 1);
-                    tk       = addTk(LITERAL_STR);
+                    tk       = add_token(LITERAL_STR);
                     strcpy(tk->text, temp_str);
                     p_ch += len;
                 } else {
