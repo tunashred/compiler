@@ -320,8 +320,8 @@ void tokenize(const char* p_ch, size_t buffer_size) {
                         add_token(TYPE_INT);
                     } else if (!strcmp(text, "float")) {
                         add_token(TYPE_FLOAT);
-                    } else if (!strcmp(text, "str")) {
-                        add_token(TYPE_STR);
+                    } else if (!strcmp(text, "charray")) {
+                        add_token(TYPE_CHARRAY);
                     } else if (!strcmp(text, "void")) {
                         add_token(TYPE_VOID);
                     } else if (!strcmp(text, "fun")) {

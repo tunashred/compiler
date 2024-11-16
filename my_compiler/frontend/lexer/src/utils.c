@@ -215,8 +215,8 @@ const char* convertTokenCode(Token* tk, int mode) {
             return "TYPE_INT";
         case TYPE_FLOAT:
             return "TYPE_FLOAT";
-        case TYPE_STR:
-            return "TYPE_STR";
+        case TYPE_CHARRAY:
+            return "TYPE_CHARRAY";
         case TYPE_VOID:
             return "TYPE_VOID";
         case FINISH:

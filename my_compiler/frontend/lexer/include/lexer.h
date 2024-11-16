@@ -14,7 +14,7 @@ typedef struct {
     union {
         char   text[MAX_STR + 1];
         int    i;
-        double r;
+        float r;
     };
 } Token;
 
@@ -25,7 +25,7 @@ typedef enum {
     ID,
     // keywords
     FUNCTION, IF, ELSE, WHILE, RETURN,
-    TYPE_INT, TYPE_FLOAT, TYPE_STR, TYPE_VOID,
+    TYPE_INT, TYPE_FLOAT, TYPE_CHARRAY, TYPE_VOID,
     // delimiters
     COMMA, COLON, SEMICOLON, L_ROUND_PAR, R_ROUND_PAR, L_BRACKET, R_BRACKET,
     // operators
