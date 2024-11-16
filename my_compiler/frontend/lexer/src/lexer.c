@@ -200,6 +200,9 @@ void tokenize(const char* p_ch) {
                 if (p_ch[1] == '-') {
                     addTk(DEC);
                     p_ch += 2;
+                } else if (p_ch[1] == '>') {
+                    addTk(FUNC_RET_OP);
+                    p_ch += 2;
                 } else {
                     addTk(SUB);
                     p_ch++;
@@ -220,26 +223,38 @@ void tokenize(const char* p_ch) {
                 p_ch++;
                 break;
 
-            case '&':
-                if (p_ch[1] == '&') {
-                    addTk(AND);
-                }
-                p_ch++;
-                break;
-            case '|':
-                if (p_ch[1] == '|') {
-                    addTk(OR);
-                }
+            case '~':
+                addTk(BITWISE_NOT);
                 p_ch++;
                 break;
             case '^':
-                addTk(XOR);
+                addTk(BITWISE_XOR);
+                p_ch++;
+                break;
+            case '&':
+                if (p_ch[1] == '&') {
+                    addTk(LOGICAL_AND);
+                    p_ch += 2;
+                } else {
+                    addTk(BITWISE_AND);
+                    p_ch++;
+                }
+                break;
+            case '|':
+                if (p_ch[1] == '|') {
+                    addTk(LOGICAL_OR);
+                    p_ch += 2;
+                } else {
+                    addTk(BITWISE_OR);
+                    p_ch++;
+                }
+                break;
             case '!':
                 if (p_ch[1] == '=') {
                     addTk(NOT_EQ);
                     p_ch += 2;
                 } else {
-                    addTk(NOT);
+                    addTk(LOGICAL_NOT);
                     p_ch++;
                 }
                 break;
@@ -290,6 +305,8 @@ void tokenize(const char* p_ch) {
                         addTk(TYPE_FLOAT);
                     } else if (!strcmp(text, "str")) {
                         addTk(TYPE_STR);
+                    } else if (!strcmp(text, "void")) {
+                        addTk(TYPE_VOID);
                     } else if (!strcmp(text, "fun")) {
                         addTk(FUNCTION);
                     } else if (!strcmp(text, "if")) {

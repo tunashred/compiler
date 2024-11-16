@@ -67,6 +67,18 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "SUB";
 
+        case INC:
+            if (mode == SYMBOL) {
+                return "++";
+            }
+            return "INC";
+
+        case DEC:
+            if (mode == SYMBOL) {
+                return "--";
+            }
+            return "DEC";
+
         case MUL:
             if (mode == SYMBOL) {
                 return "*";
@@ -79,17 +91,47 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "DIV";
 
-        case INC:
+        case BITWISE_AND:
             if (mode == SYMBOL) {
-                return "++";
+                return "&";
             }
-            return "INC";
+            return "BITWISE_AND";
 
-        case DEC:
+        case BITWISE_OR:
             if (mode == SYMBOL) {
-                return "--";
+                return "|";
             }
-            return "DEC";
+            return "BITWISE_OR";
+
+        case BITWISE_XOR:
+            if (mode == SYMBOL) {
+                return "^";
+            }
+            return "BITWISE_XOR";
+
+        case BITWISE_NOT:
+            if (mode == SYMBOL) {
+                return "~";
+            }
+            return "BITWISE_NOT";
+
+        case LOGICAL_AND:
+            if (mode == SYMBOL) {
+                return "&&";
+            }
+            return "LOGICAL_AND";
+
+        case LOGICAL_OR:
+            if (mode == SYMBOL) {
+                return "||";
+            }
+            return "LOGICAL_OR";
+
+        case LOGICAL_NOT:
+            if (mode == SYMBOL) {
+                return "!";
+            }
+            return "LOGICAL_NOT";
 
         case ASSIGN:
             if (mode == SYMBOL) {
@@ -133,6 +175,12 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "GREATER_EQ";
 
+        case FUNC_RET_OP:
+            if (mode == SYMBOL) {
+                return "->";
+            }
+            return "FUNC_RET_OP";
+
         case LITERAL_INT:
             if (mode == SYMBOL) {
                 snprintf(buffer, sizeof(buffer), "%d", tk->i);
@@ -169,14 +217,10 @@ const char* convertTokenCode(Token* tk, int mode) {
             return "TYPE_FLOAT";
         case TYPE_STR:
             return "TYPE_STR";
+        case TYPE_VOID:
+            return "TYPE_VOID";
         case FINISH:
             return "FINISH";
-        case AND:
-            return "AND";
-        case OR:
-            return "OR";
-        case NOT:
-            return "NOT";
         case SPACE:
             return "SPACE";
         case SINGLE_LINE_COMMENT:
