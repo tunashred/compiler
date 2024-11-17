@@ -3,7 +3,7 @@
 Note: The `Backus-Naur` notation requires the nonterminal symbols to be underlined, but I cannot do this in *Markdown* without touching _html_. So I will put my rules in a code block, having the terminals written in uppercase, and the nonterminals in lowercase.
 
 ```
-program ::= (varDef | funcDef | block)* FINISH
+program ::= (varDef | funcPrototype | funcDeclaration | block)* FINISH
 
 baseType ::= TYPE_INT
       | TYPE_FLOAT
