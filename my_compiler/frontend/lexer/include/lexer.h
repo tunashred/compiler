@@ -12,8 +12,9 @@ typedef struct {
     int line;
 
     union {
-        char   text[MAX_STR + 1];
-        int    i;
+        char c;
+        char  text[MAX_STR + 1];
+        int   i;
         float r;
     };
 } Token;
@@ -27,14 +28,15 @@ typedef enum {
     FUN, IF, ELIF,  ELSE, WHILE, RETURN,
     TYPE_INT, TYPE_FLOAT, TYPE_CHARRAY, TYPE_VOID,
     // delimiters
-    COMMA, COLON, SEMICOLON, L_ROUND_PAR, R_ROUND_PAR, L_BRACKET, R_BRACKET,
+    SINGLE_QUOTE, DOUBLE_QUOTE, COMMA, COLON, SEMICOLON,
+    L_ROUND_PAR, R_ROUND_PAR, L_SQUARE_PAR, R_SQUARE_PAR, L_BRACKET, R_BRACKET,
     // operators
     ADD, SUB, INC, DEC, MUL, DIV,
     BITWISE_AND, BITWISE_OR, BITWISE_XOR, BITWISE_NOT,
     LOGICAL_AND, LOGICAL_OR, LOGICAL_NOT, ASSIGN, EQUAL, NOT_EQ, LESS, LESS_EQ, GREATER, GREATER_EQ,
     FUNC_RET_OP,
     // literals
-    LITERAL_INT, LITERAL_FLOAT, LITERAL_STR,
+    LITERAL_INT, LITERAL_FLOAT, LITERAL_CHAR, LITERAL_STR,
     // non-tokens
     SPACE, SINGLE_LINE_COMMENT, MULTI_LINE_COMMENT,
     FINISH

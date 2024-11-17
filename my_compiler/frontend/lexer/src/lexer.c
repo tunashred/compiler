@@ -106,8 +106,9 @@ int scan_str(const char* start) {
 }
 
 Token* add_literal_tk(const char* start, int len, int tk_code) {
+    // TODO: add case for invalid tk_code too and print all arg values before err
     if (!start || len <= 0) {
-        err("Bad arguments when trying to add token, at line: %d\n", line);
+        err("Bad arguments when trying to add token, at line: %d", line);
         return NULL;
     }
 
@@ -172,6 +173,14 @@ void tokenize(const char* p_ch, size_t buffer_size) {
                 break;
             case ')':
                 add_token(R_ROUND_PAR);
+                p_ch++;
+                break;
+            case '[':
+                add_token(L_SQUARE_PAR);
+                p_ch++;
+                break;
+            case ']':
+                add_token(R_SQUARE_PAR);
                 p_ch++;
                 break;
             case '{':
@@ -366,6 +375,13 @@ void tokenize(const char* p_ch, size_t buffer_size) {
                     tk       = add_token(LITERAL_STR);
                     strcpy(tk->text, temp_str);
                     p_ch += len;
+                } else if (*p_ch == '\'') {
+                    if (p_ch[2] != '\'') {
+                        err("Values inside single-quoted literals must be one character length, at line %d", line);
+                    }
+                    tk = add_token(LITERAL_CHAR);
+                    tk->c = p_ch[1];
+                    p_ch += 3;
                 } else {
                     err("Invalid char '%c', at line: %d", *p_ch, line);
                 }

@@ -25,3 +25,8 @@ fun moo(int a, int x) -> int {
     }
     return --a;
 }
+
+fun main() -> void {
+    charray charr = "fork";
+    charr[0] = 'p';
+}

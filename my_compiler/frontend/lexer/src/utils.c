@@ -13,6 +13,18 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "ID";
 
+        case SINGLE_QUOTE:
+            if (mode == SYMBOL) {
+                return "\'";
+            }
+            return "SINGLE_QUOTE";
+
+        case DOUBLE_QUOTE:
+            if (mode == SYMBOL) {
+                return "\"";
+            }
+            return "DOUBLE_QUOTE";
+
         case COMMA:
             if (mode == SYMBOL) {
                 return ",";
@@ -42,6 +54,18 @@ const char* convertTokenCode(Token* tk, int mode) {
                 return ")";
             }
             return "R_ROUND_PAR";
+
+        case L_SQUARE_PAR:
+            if (mode == SYMBOL) {
+                return "[";
+            }
+            return "L_SQUARE_PAR";
+
+        case R_SQUARE_PAR:
+            if (mode == SYMBOL) {
+                return "]";
+            }
+            return "R_SQUARE_PAR";
 
         case L_BRACKET:
             if (mode == SYMBOL) {
@@ -201,6 +225,12 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "LITERAL_STR";
 
+        case LITERAL_CHAR:
+            if (mode == SYMBOL) {
+                return &tk->c;
+            }
+            return "LITERAL_CHAR";
+
         case FUN:
             return "FUN";
         case IF:
@@ -275,7 +305,10 @@ void printDebugTokens() {
 
         if (tokens[i].code == LITERAL_STR) {
             printf(" \"%s\"", convertTokenCode(&tokens[i], SYMBOL));
-        } else {
+        } else if (tokens[i].code == LITERAL_CHAR) {
+            printf(" '%s'", convertTokenCode(&tokens[i], SYMBOL));
+        }
+        else {
             printf(" %s", convertTokenCode(&tokens[i], SYMBOL));
         }
     }
