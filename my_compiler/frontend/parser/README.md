@@ -24,8 +24,8 @@ instrBody ::= L_BRACKET block R_BRACKET
 funcDeclaration ::= funcDefinition instrBody
 
 instr ::= expr? SEMICOLON
-       | WHILE (L_ROUND_PAR type? ASSIGN expr R_ROUND_PAR)? expr instrBody
-       | IF L_ROUND_PAR expr R_ROUND_PAR instrBody (ELIF L_ROUND_PAR expr R_ROUND_PAR instrBody)? (ELSE instrBody)?
+       | WHILE (L_ROUND_PAR type? ID ASSIGN expr R_ROUND_PAR)? expr instrBody
+       | IF L_ROUND_PAR expr R_ROUND_PAR instrBody? (ELIF L_ROUND_PAR expr R_ROUND_PAR instrBody? )? (ELSE instrBody? )?
        | RETURN expr SEMICOLON
 
 expr ::= exprLogic
