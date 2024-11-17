@@ -1,0 +1,8 @@
+int x = 1, y, z;
+charray s = "sadsada";
+
+float a, rdsadsad = 1;
+float b = 1231432;
+int fdsfs;
+
+charray s = "waereafds", fsd = "sfdafds";
