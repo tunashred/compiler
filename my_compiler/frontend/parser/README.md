@@ -36,7 +36,7 @@ exprAssign ::= (ID ASSIGN (L_SQUARE_PAR expr R_SQUARE_PAR)? )? exprComp
 
 exprComp ::= exprBitwise ((EQUAL | NOT_EQ | LESS | LESS_EQ | GREATER | GREATER_EQ) exprBitwise)?
 
-exprBitwise ::= exprAdd ((BITWISE_AND | BITWISE_XOR | BITWISE_OR) exprAdd)?
+exprBitwise ::= exprAdd ((BITWISE_AND | BITWISE_XOR | BITWISE_OR) exprAdd)*
 
 exprAdd ::= exprMul ((ADD|SUB) exprMul)*
 
