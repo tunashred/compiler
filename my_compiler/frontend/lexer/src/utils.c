@@ -201,8 +201,8 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "LITERAL_STR";
 
-        case FUNCTION:
-            return "FUNCTION";
+        case FUN:
+            return "FUN";
         case IF:
             return "IF";
         case ELSE:

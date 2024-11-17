@@ -325,7 +325,7 @@ void tokenize(const char* p_ch, size_t buffer_size) {
                     } else if (!strcmp(text, "void")) {
                         add_token(TYPE_VOID);
                     } else if (!strcmp(text, "fun")) {
-                        add_token(FUNCTION);
+                        add_token(FUN);
                     } else if (!strcmp(text, "if")) {
                         add_token(IF);
                     } else if (!strcmp(text, "else")) {
