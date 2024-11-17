@@ -17,6 +17,8 @@ fun moo(int a, int x) -> int {
     while (int i = 0) < 10 {
         if (x <= 1 && b >= 1 || !a) {
             print("woof");
+        } elif {
+            print("meow");
         } else {
             return x;
         }

@@ -205,6 +205,8 @@ const char* convertTokenCode(Token* tk, int mode) {
             return "FUN";
         case IF:
             return "IF";
+        case ELIF:
+            return "ELIF";
         case ELSE:
             return "ELSE";
         case WHILE:
@@ -225,6 +227,8 @@ const char* convertTokenCode(Token* tk, int mode) {
             return "SPACE";
         case SINGLE_LINE_COMMENT:
             return "SINGLE_LINE_COMMENT";
+        case MULTI_LINE_COMMENT:
+            return "MULTI_LINE_COMMENT";
         default:
             return "UNKNOWN";
     }

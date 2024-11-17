@@ -123,7 +123,7 @@ Token* add_literal_tk(const char* start, int len, int tk_code) {
             break;
 
         case LITERAL_FLOAT:
-            tk->r = atof(temp_str);
+            tk->r = (float)atof(temp_str);
             break;
     }
     return tk;
@@ -328,6 +328,8 @@ void tokenize(const char* p_ch, size_t buffer_size) {
                         add_token(FUN);
                     } else if (!strcmp(text, "if")) {
                         add_token(IF);
+                    } else if (!strcmp(text, "elif")) {
+                        add_token(ELIF);
                     } else if (!strcmp(text, "else")) {
                         add_token(ELSE);
                     } else if (!strcmp(text, "while")) {
@@ -347,7 +349,7 @@ void tokenize(const char* p_ch, size_t buffer_size) {
                     if ((len = scan_real(p_ch))) {
                         temp_str = copy_slice(buffer, p_ch, p_ch + len);
                         tk       = add_token(LITERAL_FLOAT);
-                        tk->r    = atof(temp_str);
+                        tk->r    = (float)atof(temp_str);
                     } else if ((len = scan_int(p_ch))) {
                         temp_str = copy_slice(buffer, p_ch, p_ch + len);
                         tk       = add_token(LITERAL_INT);
