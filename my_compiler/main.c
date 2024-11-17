@@ -8,7 +8,7 @@
 
 int main() {
     size_t buffer_size;
-    char* buffer = loadFile("../frontend/test/sample_2.txt", &buffer_size);
+    char* buffer = loadFile("../frontend/test/sample_1.txt", &buffer_size);
     tokenize(buffer, buffer_size);
     printTokens();
     printf("\n\n");

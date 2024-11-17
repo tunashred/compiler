@@ -36,8 +36,7 @@ bool baseType() {
             return true;
 
         default:
-            printf("token code:%s\n", convertTokenCode(&tokens[iTk], NAME));
-            err("Unknown variable type, at line %d", tokens[iTk].line);
+            return false;
     }
 }
 
@@ -213,6 +212,22 @@ bool expr() { return expr_logic(); }
 
 bool block();
 
+bool instr_body() {
+    int start = iTk;
+    if (consume(L_BRACKET)) {
+        if (!block()) {
+            // do i need this?
+            err("Expected block of code, at line %d", tokens[iTk].line);
+        }
+        if (!consume(R_BRACKET)) {
+            err("Expected '}' after block, at line %d", tokens[iTk].line);
+        }
+        return true;
+    }
+    iTk = start;
+    return false;
+}
+
 bool instr() {
     int start = iTk;
     if (expr()) {
@@ -228,6 +243,32 @@ bool instr() {
         return true;
     }
 
+    if (consume(WHILE)) {
+        if (consume(L_ROUND_PAR)) {
+            baseType();
+            if (!consume(ID)) {
+                err("Expected variable name at while initialization, at line %d", tokens[iTk].line);
+            }
+            if (!consume(ASSIGN)) {
+                err("Expected assigment operator '=', at line %d", tokens[iTk].line);
+            }
+            if (!expr()) {
+                err("Invalid expression used at assigment, at line %d", tokens[iTk].line);
+            }
+            if (!consume(R_ROUND_PAR)) {
+                err("Missing ')' after variable initialization, at line %d", tokens[iTk].line);
+            }
+        }
+        if (!expr()) {
+            err("Missing expression inside \"while\" statement, at line %d", tokens[iTk].line);
+        }
+        if (!instr_body()) {
+            // maybe at some point, I want to allow this
+            err("\"while\" statement body is empty, at line %d", tokens[iTk].line);
+        }
+        return true;
+    }
+
     if (consume(IF)) {
         if (!consume(L_ROUND_PAR)) {
             err("If statement start with '(', at line %d", tokens[iTk].line);
@@ -238,21 +279,26 @@ bool instr() {
         if (!consume(R_ROUND_PAR)) {
             err("If statement must end with ')', at line %d", tokens[iTk].line);
         }
-        if (!consume(L_BRACKET)) {
 
+        instr_body();
+
+        if (consume(ELIF)) {
+            if (!consume(L_ROUND_PAR)) {
+                err("Elif statement start with '(', at line %d", tokens[iTk].line);
+            }
+            if (!expr()) {
+                err("Elif statement is not provided an expression, at line %d", tokens[iTk].line);
+            }
+            if (!consume(R_ROUND_PAR)) {
+                err("Elif statement must end with ')', at line %d", tokens[iTk].line);
+            }
+            instr_body();
         }
-
-        block();
 
         if (consume(ELSE)) {
-            if (!block()) {
-                err("Else statement missing block, at line %d", tokens[iTk].line);
-            }
+            instr_body();
         }
-        if (!consume(R_BRACKET)) {
-            // unsafe?
-            err("If statement missing '}' scope terminator, at line %d", tokens[iTk].line);
-        }
+
         return true;
     }
 
@@ -260,27 +306,6 @@ bool instr() {
         expr();
         if (!consume(SEMICOLON)) {
             err("Return statement missing ';', at line %d", tokens[iTk].line);
-        }
-        return true;
-    }
-
-    if (consume(WHILE)) {
-        if (!consume(L_ROUND_PAR)) {
-            err("Missing left paranthesis after \"while\" statement, at line %d", tokens[iTk].line);
-        }
-        if (!expr()) {
-            err("Missing expression inside \"while\" statement, at line %d", tokens[iTk].line);
-        }
-        if (!consume(R_ROUND_PAR)) {
-            err("Missing right paranthesis at \"while\" statement, at line %d", tokens[iTk].line);
-        }
-        if (!block()) {
-            // maybe at some point, I want to allow this
-            err("\"while\" statement body is empty, at line %d", tokens[iTk].line);
-        }
-        if (!consume(R_BRACKET)) {
-            // unsafe?
-            err("While loop missing '}' scope terminator, at line %d", tokens[iTk].line);
         }
         return true;
     }
@@ -336,9 +361,10 @@ bool func_definition() {
         if (!consume(FUNC_RET_OP)) {
             err("Function return type must be preceded by '->', at line %d", tokens[iTk].line);
         }
-        if (!baseType() || !consume(TYPE_VOID)) {
+        if (!baseType() && !consume(TYPE_VOID)) {
             err("Unknown function return type, at line %d", tokens[iTk].line);
         }
+        return true;
     }
 
     iTk = start;
@@ -346,27 +372,13 @@ bool func_definition() {
 }
 
 bool func_prototype() {
+    int start = iTk;
     if (func_definition()) {
         if (consume(SEMICOLON)) {
             return true;
         }
+        iTk = start;
     }
-    return true;
-}
-
-bool instr_body() {
-    int start = iTk;
-    if (consume(L_BRACKET)) {
-        if (!block()) {
-            // do i need this?
-            err("Expected block of code, at line %d", tokens[iTk].line);
-        }
-        if (!consume(R_BRACKET)) {
-            err("Expected '}' after block, at line %d", tokens[iTk].line);
-        }
-        return true;
-    }
-    iTk = start;
     return false;
 }
 
@@ -380,7 +392,7 @@ bool func_declaration() {
 }
 
 bool program() {
-    func_definition();
+    // func_definition();
     for (;;) {
         if (var_def()) {
         } else if (func_prototype()) {
