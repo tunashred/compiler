@@ -36,7 +36,7 @@ exprAssign ::= (ID ASSIGN)? exprComp
 
 exprComp ::= exprBitwise ((EQUAL | NOT_EQ | LESS | LESS_EQ | GREATER | GREATER_EQ) exprBitwise)?
 
-exprBitwise ::= exprAdd ((BITWISE_AND | BITWISE_XOR | BITWISE_OR))
+exprBitwise ::= exprAdd ((BITWISE_AND | BITWISE_XOR | BITWISE_OR) exprAdd)?
 
 exprAdd ::= exprMul ((ADD|SUB) exprMul)*
 
