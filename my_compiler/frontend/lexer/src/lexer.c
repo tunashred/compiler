@@ -372,7 +372,7 @@ void tokenize(const char* p_ch, size_t buffer_size) {
                     len = scan_str(p_ch);
                     p_ch++;
                     temp_str = copy_slice(buffer, p_ch, p_ch + len - 1);
-                    tk       = add_token(LITERAL_STR);
+                    tk       = add_token(LITERAL_CHARRAY);
                     strcpy(tk->text, temp_str);
                     p_ch += len;
                 } else if (*p_ch == '\'') {

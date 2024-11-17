@@ -219,11 +219,11 @@ const char* convertTokenCode(Token* tk, int mode) {
             }
             return "LITERAL_FLOAT";
 
-        case LITERAL_STR:
+        case LITERAL_CHARRAY:
             if (mode == SYMBOL) {
                 return tk->text;
             }
-            return "LITERAL_STR";
+            return "LITERAL_CHARRAY";
 
         case LITERAL_CHAR:
             if (mode == SYMBOL) {
@@ -274,7 +274,7 @@ void printTokens() {
             printf("INT:%d\n", tk->i);
         } else if (tk->code == LITERAL_FLOAT) {
             printf("REAL:%f\n", tk->r);
-        } else if (tk->code == LITERAL_STR) {
+        } else if (tk->code == LITERAL_CHARRAY) {
             printf("STR:%s\n", tk->text);
         } else {
             printf("%s\n", convertTokenCode(tk, NAME));
@@ -303,7 +303,7 @@ void printDebugTokens() {
             printf("\n%4d:", tokens[i].line);
         }
 
-        if (tokens[i].code == LITERAL_STR) {
+        if (tokens[i].code == LITERAL_CHARRAY) {
             printf(" \"%s\"", convertTokenCode(&tokens[i], SYMBOL));
         } else if (tokens[i].code == LITERAL_CHAR) {
             printf(" '%s'", convertTokenCode(&tokens[i], SYMBOL));
