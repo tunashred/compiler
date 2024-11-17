@@ -32,7 +32,7 @@ expr ::= exprLogic
 
 exprLogic ::= exprAssign ((LOGICAL_AND | LOGICAL_OR) exprAssign)*
 
-exprAssign ::= (ID ASSIGN)? exprComp
+exprAssign ::= (ID ASSIGN (L_SQUARE_PAR expr R_SQUARE_PAR)? )? exprComp
 
 exprComp ::= exprBitwise ((EQUAL | NOT_EQ | LESS | LESS_EQ | GREATER | GREATER_EQ) exprBitwise)?
 
