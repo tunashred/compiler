@@ -19,14 +19,19 @@ funcDefinition ::= FUN ID L_ROUND_PAR funcArgs? R_ROUND_PAR FUNC_RET_OP (baseTyp
 
 funcPrototype ::= funcDefinition SEMICOLON
 
+compOp ::= EQUAL | NOT_EQ | LESS | LESS_EQ | GREATER | GREATER_EQ
+
+instr ::= expr? SEMICOLON
+       | varDef
+       | WHILE (L_ROUND_PAR type? ID ASSIGN expr R_ROUND_PAR compOp )? expr instrBody
+       | IF L_ROUND_PAR expr R_ROUND_PAR instrBody? (ELIF L_ROUND_PAR expr R_ROUND_PAR instrBody? )? (ELSE instrBody? )?
+       | RETURN expr SEMICOLON
+
+block ::= instr+
+
 instrBody ::= L_BRACKET block R_BRACKET
 
 funcDeclaration ::= funcDefinition instrBody
-
-instr ::= expr? SEMICOLON
-       | WHILE (L_ROUND_PAR type? ID ASSIGN expr R_ROUND_PAR)? expr instrBody
-       | IF L_ROUND_PAR expr R_ROUND_PAR instrBody? (ELIF L_ROUND_PAR expr R_ROUND_PAR instrBody? )? (ELSE instrBody? )?
-       | RETURN expr SEMICOLON
 
 expr ::= exprLogic
 
