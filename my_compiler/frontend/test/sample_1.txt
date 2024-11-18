@@ -3,8 +3,42 @@ dsadsddfds ***sdar8392hngd//sadsa321
 sdadsa
 */
 
+charr[0] = 'p';
+
+
+while (int i = 0) < 10 {
+    s + 1;
+}
+
 // this is a comment
 
+
+if (x <= 1 && b >= 1 || !a) {
+    print("woof");
+} elif (!z) {
+    print("meow");
+} else {
+    return x;
+}
+
+while (int i = 0) < 10 {
+    int z = 1;
+}
+
+fun moo(int a, int x) -> int {
+    float x = 6.9;
+    if (x <= 1 && b >= 1 || !a) {
+        print("woof");
+    } elif (!z) {
+        print("meow");
+    } else {
+        return x;
+    }
+    while (int i = 0) < 10 {
+        s + 1;
+    }
+    return foo(a);
+}
 gg = 5 ^ 1 | 43 & ~12; /* asdadsa */
 
 fun printy() -> void {
@@ -12,19 +46,6 @@ fun printy() -> void {
 }
 
 
-fun moo(int a, int x) -> int {
-    float x = 6.9;
-    while (int i = 0) < 10 {
-        if (x <= 1 && b >= 1 || !a) {
-            print("woof");
-        } elif {
-            print("meow");
-        } else {
-            return x;
-        }
-    }
-    return --a;
-}
 
 fun main() -> void {
     charray charr = "fork";

@@ -94,6 +94,13 @@ bool factor() {
             if (!consume(R_ROUND_PAR)) {
                 err("Expression missing ')', at line %d", tokens[iTk].line);
             }
+        } else if (consume(L_SQUARE_PAR)) {
+            if(!expr()) {
+                err("Array access index is empty, at line %d", tokens[iTk].line);
+            }
+            if (!consume(R_SQUARE_PAR)) {
+                err("Array access element must be closed with ']', at line %d", tokens[iTk].line);
+            }
         // TODO: check if this should be moved to a better place
         } else if (tokens[iTk].code == ID) {
             err("Ambiguous listing of identifiers, at line %d", tokens[iTk].line);
@@ -172,7 +179,7 @@ bool expr_comp() {
     if (expr_bitwise()) {
         // TODO: need to revise operator precedence table
         // TODOx2: add more informative errors here
-        while (consume(EQUAL) || consume(NOT_EQ) || consume(LESS) || consume(GREATER) || consume(GREATER_EQ)) {
+        while (consume(EQUAL) || consume(NOT_EQ) || consume(LESS) || consume(LESS_EQ) || consume(GREATER) || consume(GREATER_EQ)) {
             if (!expr_bitwise()) {
                 err("Missing expression after comparation operand, at line %d", tokens[iTk].line);
             }
@@ -235,11 +242,15 @@ bool instr() {
         if (!consume(SEMICOLON)) {
             // this would be bad for char arrays
             // but this will depend on the way of implementing these
-            if (tokens[iTk].code == ASSIGN) {
+            if (tokens[iTk].code == ASSIGN && tokens[iTk - 1].code != R_SQUARE_PAR) {
                 err("Invalid assignment logic, at line %d", tokens[iTk].line);
             }
             err("Missing semicolon after expression, at line %d", tokens[iTk].line);
         }
+        return true;
+    }
+
+    if (var_def()) {
         return true;
     }
 
@@ -257,6 +268,9 @@ bool instr() {
             }
             if (!consume(R_ROUND_PAR)) {
                 err("Missing ')' after variable initialization, at line %d", tokens[iTk].line);
+            }
+            if(tokens[iTk].code >= EQUAL && tokens[iTk].code <= GREATER_EQ) {
+                consume(tokens[iTk].code);
             }
         }
         if (!expr()) {
@@ -395,8 +409,8 @@ bool program() {
     // func_definition();
     for (;;) {
         if (var_def()) {
-        } else if (func_prototype()) {
         } else if (func_declaration()) {
+        } else if (func_prototype()) {
         } else if (block()) {
         } else
             break;
