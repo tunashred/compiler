@@ -2,7 +2,7 @@
 dsadsddfds ***sdar8392hngd//sadsa321
 sdadsa
 */
-
+x = 1;
 charr[0] = 'p';
 
 

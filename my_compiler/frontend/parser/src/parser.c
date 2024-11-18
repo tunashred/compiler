@@ -94,13 +94,6 @@ bool factor() {
             if (!consume(R_ROUND_PAR)) {
                 err("Expression missing ')', at line %d", tokens[iTk].line);
             }
-        } else if (consume(L_SQUARE_PAR)) {
-            if(!expr()) {
-                err("Array access index is empty, at line %d", tokens[iTk].line);
-            }
-            if (!consume(R_SQUARE_PAR)) {
-                err("Array access element must be closed with ']', at line %d", tokens[iTk].line);
-            }
         // TODO: check if this should be moved to a better place
         } else if (tokens[iTk].code == ID) {
             err("Ambiguous listing of identifiers, at line %d", tokens[iTk].line);
@@ -192,6 +185,14 @@ bool expr_comp() {
 bool expr_assign() {
     int start = iTk;
     if (consume(ID)) {
+        if (consume(L_SQUARE_PAR)) {
+            if(!expr()) {
+                err("Array access index is empty, at line %d", tokens[iTk].line);
+            }
+            if (!consume(R_SQUARE_PAR)) {
+                err("Array access element must be closed with ']', at line %d", tokens[iTk].line);
+            }
+        }
         if (!consume(ASSIGN)) {
             iTk = start;
         }
