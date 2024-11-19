@@ -19,31 +19,31 @@ funcDefinition ::= FUN ID L_ROUND_PAR funcArgs? R_ROUND_PAR FUNC_RET_OP (baseTyp
 
 funcPrototype ::= funcDefinition SEMICOLON
 
-compOp ::= EQUAL | NOT_EQ | LESS | LESS_EQ | GREATER | GREATER_EQ
-
-instr ::= expr? SEMICOLON
-       | varDef
-       | WHILE (L_ROUND_PAR type? ID ASSIGN expr R_ROUND_PAR compOp )? expr instrBody
-       | IF L_ROUND_PAR expr R_ROUND_PAR instrBody? (ELIF L_ROUND_PAR expr R_ROUND_PAR instrBody? )? (ELSE instrBody? )?
-       | RETURN expr SEMICOLON
-
 block ::= instr+
 
 instrBody ::= L_BRACKET block R_BRACKET
 
 funcDeclaration ::= funcDefinition instrBody
 
+compOp ::= EQUAL | NOT_EQ | LESS | LESS_EQ | GREATER | GREATER_EQ
+
+instr ::= expr? SEMICOLON
+       | varDef
+       | WHILE (L_ROUND_PAR type? ID ASSIGN expr R_ROUND_PAR compOp )? expr instrBody
+       | IF L_ROUND_PAR expr R_ROUND_PAR instrBody? (ELIF L_ROUND_PAR expr R_ROUND_PAR instrBody? )? (ELSE instrBody? )?
+       | RETURN expr? SEMICOLON
+
 expr ::= exprLogic
 
 exprLogic ::= exprAssign ((LOGICAL_AND | LOGICAL_OR) exprAssign)*
 
-exprAssign ::= (ID ASSIGN (L_SQUARE_PAR expr R_SQUARE_PAR)? )? exprComp
+exprAssign ::= (ID (L_SQUARE_PAR expr R_SQUARE_PAR)? ASSIGN )? exprComp
 
-exprComp ::= exprBitwise ((EQUAL | NOT_EQ | LESS | LESS_EQ | GREATER | GREATER_EQ) exprBitwise)?
+exprComp ::= exprBitwise (compOp exprBitwise)?
 
 exprBitwise ::= exprAdd ((BITWISE_AND | BITWISE_XOR | BITWISE_OR) exprAdd)*
 
-exprAdd ::= exprMul ((ADD|SUB) exprMul)*
+exprAdd ::= exprMul ((ADD | SUB) exprMul)*
 
 exprMul ::= exprPrefix ((MUL | DIV) exprPrefix)*
 
@@ -51,6 +51,7 @@ exprPrefix ::= (ADD | SUB | LOGICAL_NOT | BITWISE_NOT)? factor
 
 factor ::= LITERAL_INT
         | LITERAL_FLOAT
+        | LITERAL_CHAR
         | LITERAL_CHARRAY
         | L_ROUND_PAR expr R_ROUND_PAR
         | ID (L_ROUND_PAR (expr (COMMA expr)* )? R_ROUND_PAR)?
