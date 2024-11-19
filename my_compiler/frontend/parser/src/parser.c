@@ -367,7 +367,7 @@ bool func_definition() {
             err("Function declaration missing '(', at line %d", tokens[iTk].line);
         }
         if (tokens[iTk].code != R_ROUND_PAR) {
-            func_args();
+            func_args(); // what if this returns false?
         }
 
         if (!consume(R_ROUND_PAR)) {
