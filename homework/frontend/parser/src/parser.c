@@ -34,7 +34,7 @@ bool baseType() {
             return true;
 
         default:
-            err("Invalid variable type, at line %d", tokens[iTk].line);
+            err("Invalid type, at line %d", tokens[iTk].line);
     }
 }
 
@@ -151,14 +151,16 @@ bool expr_comp() {
 bool expr_assign() {
     int start = iTk;
     if (consume(ID)) {
-        if (!consume(ASSIGN)) {
-            iTk = start;
+        if (consume(ASSIGN)) {
+            if (!expr_comp()) {
+                err("Expected expression at assigment");
+            }
+            return true;
         }
     }
-    if (expr_comp()) {
-        return true;
-    }
-    return false;
+    iTk = start;
+    
+    return expr_comp();
 }
 
 bool expr_logic() {
@@ -182,15 +184,11 @@ bool instr() {
     if (expr()) {
         // do I need to move it out of the nest?
         if (!consume(SEMICOLON)) {
-            // this would be bad for char arrays
-            // but this will depend on the way of implementing these
-            if (tokens[iTk].code == ASSIGN) {
-                err("Invalid assignment logic, at line %d", tokens[iTk].line);
-            }
             err("Missing semicolon after expression, at line %d", tokens[iTk].line);
         }
         return true;
     }
+    consume(SEMICOLON);
 
     if (consume(IF)) {
         if (!consume(LPAR)) {
@@ -218,7 +216,9 @@ bool instr() {
     }
 
     if (consume(RETURN)) {
-        expr();
+        if (!expr()) {
+            err("Expected expression at return, at line %d", tokens[iTk].line);
+        }
         if (!consume(SEMICOLON)) {
             err("Return statement missing ';', at line %d", tokens[iTk].line);
         }
