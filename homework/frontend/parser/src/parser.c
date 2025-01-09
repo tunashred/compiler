@@ -1,3 +1,5 @@
+#include "parser.h"
+
 #include <stdarg.h>
 #include <stdbool.h>
 
@@ -153,7 +155,7 @@ bool expr_assign() {
     if (consume(ID)) {
         if (consume(ASSIGN)) {
             if (!expr_comp()) {
-                err("Expected expression at assigment");
+                err("Expected expression at assigment, at line %d", tokens[iTk].line);
             }
             return true;
         }
