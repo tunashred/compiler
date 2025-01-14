@@ -12,4 +12,4 @@ add_library(parser_lib ${PARSER_SOURCES})
 target_include_directories(parser_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Link common_flags to parser_lib
-target_link_libraries(parser_lib PUBLIC common_flags lexer_lib)
+target_link_libraries(parser_lib PUBLIC common_flags lexer_lib domain_lib types_lib)

@@ -33,6 +33,8 @@ collect_sources_and_includes(${CMAKE_SOURCE_DIR})
 # Include the lexer and parser subdirectories
 add_subdirectory(lexer)
 add_subdirectory(parser)
+add_subdirectory(semantic_analyzer)
+add_subdirectory(types_analyzer)
 
 # Set main file path
 set(MAIN_FILE_PATH "${CMAKE_SOURCE_DIR}/main.c")
@@ -74,10 +76,12 @@ target_compile_options(common_flags INTERFACE
 )
 
 # Link common_flags to lexer_lib, parser_lib, and the main executable
-target_link_libraries(${EXECUTABLE} PRIVATE common_flags lexer_lib parser_lib)
+target_link_libraries(${EXECUTABLE} PRIVATE common_flags lexer_lib parser_lib domain_lib)
 
 # Include lexer and parser directories for the main executable
 target_include_directories(${EXECUTABLE} PRIVATE
     ${CMAKE_SOURCE_DIR}/lexer/include
     ${CMAKE_SOURCE_DIR}/parser/include
+    ${CMAKE_SOURCE_DIR}/semantic_analyzer/include
+    ${CMAKE_SOURCE_DIR}/types_analyzer/include
 )
