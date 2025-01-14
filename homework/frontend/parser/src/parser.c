@@ -84,22 +84,55 @@ bool expr();
 
 bool factor() {
     int start = iTk;
-    if (consume(LITERAL_INT) || consume(LITERAL_REAL) || consume(LITERAL_STR)) {
+    if (consume(LITERAL_INT)) {
+        setRet(TYPE_INT, false);
+        return true;
+    } else if (consume(LITERAL_REAL)) {
+        setRet(TYPE_REAL, false);
+        return true;
+    } else if (consume(LITERAL_STR)) {
+        setRet(TYPE_STR, false);
         return true;
     } else if (consume(LPAR) && expr() && consume(RPAR)) {
         return true;
     } else if (consume(ID)) {
+        Symbol* symbol = searchSymbol(consumed->text);
+        if (!symbol) {
+            err("Undefined symbol, at line %d", tokens[iTk].line);
+        }
         if (consume(LPAR)) {
+            if (symbol->kind != KIND_FN) {
+                err("%s cannot be called since it is not a function, at line %d", symbol->name, tokens[iTk].line);
+            }
+            Symbol* argDef = symbol->args;
             if (expr()) {
+                if (!argDef) {
+                    err("The function %s is called with too many arguments, at line %d", symbol->name, tokens[iTk].line);
+                }
+                if (argDef->type != ret.type) {
+                    err("The argument at function %s call is different from the one given at its definition, at line %d", symbol->name, tokens[iTk].line);
+                }
+                argDef = argDef->next;
                 while (consume(COMMA)) {
                     if (!expr()) {
                         err("Invalid expression, at line %d", tokens[iTk].line);
                     }
+                    if (!argDef) {
+                        err("The function %s is called with too many arguments, at line %d", symbol->name, tokens[iTk].line);
+                    }
+                    if (argDef->type != ret.type) {
+                        err("The argument at function %s call is different from the one given at its definition, at line %d", symbol->name, tokens[iTk].line);
+                    }
+                    argDef = argDef->next;
                 }
             }
             if (!consume(RPAR)) {
                 err("Expression missing ')', at line %d", tokens[iTk].line);
             }
+            if (argDef) {
+                err("The function is called with too few arguments, at line %d", tokens[iTk].line);
+            }
+            setRet(symbol->type, false);
         } else if (tokens[iTk].code == ID) {
             err("Ambiguous listing of identifiers, at line %d", tokens[iTk].line);
         }
@@ -114,12 +147,29 @@ bool factor() {
 bool expr_prefix() {
     // maybe here it would pass the code of the operator which prefixes the potential literal val
     // and then factor() would handle its signedness
-    if (consume(SUB) || consume(NOT)) {}
-    // wtf, this allows case SUB LITERAL_STR or NOT LITERAL_STR
-    if (!factor()) {
-        return false;
+    if (consume(SUB)) {
+        if (factor()) {
+            if (ret.type == TYPE_STR) {
+                err("Expression of unary expression must be int or real, at line %d", tokens[iTk].line);
+            }
+            ret.lval = false;
+            return true;
+        }
     }
-    return true;
+    if (consume(NOT)) {
+        if (factor()) {
+            if (ret.type == TYPE_STR) {
+                err("The expression of '!' must be int or real, at line %d", tokens[iTk].line);
+            }
+            setRet(TYPE_INT, false);
+            return true;
+        }
+    }
+    if (factor()) {
+        return true;
+    }
+    // wtf, this allows case SUB LITERAL_STR or NOT LITERAL_STR
+    return false;
 }
 
 bool expr_mul() {
