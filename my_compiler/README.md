@@ -80,6 +80,8 @@ At the moment, macros would need to be wrapped around `[ ]`.
 
 #### 5\. Switch case would be nice to work with strings and data structures too.
 
+#### 6\. Preprocessor directive for disabling compiler optimizations. Motivation: Maybe for certain tests?
+
 ## Minimal features
 First, I will just do the minimum features I want in my language. After I am done with all the components of the compiler working with my little programming language, I will add more stuff.
 
